@@ -99,7 +99,7 @@
                 </tr>
                 <tr class="menu-row">
                     <td class="menu-btn menu-icon-settings">
-                        <a href="{{ url('settings') }}" class="non-style-link-menu">
+                        <a href="{{route('patient-settings',['id'=>$user->id]) }}" class="non-style-link-menu">
                             <div><p class="menu-text">Settings</p></div>
                         </a>
                     </td>

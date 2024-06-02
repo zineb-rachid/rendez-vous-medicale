@@ -8,8 +8,9 @@ use App\Models\patient;
 use App\Models\schedule;
 use App\Models\appointment;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PatientController extends Controller
 {
@@ -78,10 +79,60 @@ class PatientController extends Controller
                 ->orWhere('appdate',  $search)
                 ->get();
         } 
-        else {
+        else 
+        {
             $appointments = appointment::orderBy('appdate', 'desc')->get();
         }
-
         return view('patient.appointment', compact('username', 'user', 'useremail', 'today','appointments'));
+    }
+    public function deleteAppointment($id)
+    {
+        if($id){
+            $appointment = appointment::find($id);
+            $appointment->delete();
+        }
+        else 'no appointment ';
+        return redirect()->back();
+    
+    }
+    public function settings($id)
+    {
+        $today = now()->format('Y-m-d');
+        $user = user::find($id);
+        $patient=patient::find($id);
+        $useremail = $user->email;
+        $patient = patient::where('pemail', $user->email)->first();
+        $username = $patient->pname;
+
+        return view('patient.settings',compact('today' ,'user' ,'useremail' , 'username','patient'));
+    }
+    public function update( $pid)
+    {
+        $patient = patient::find($pid);
+        $patient->pname = request('pname');
+        $patient->pemail =request('pemail'); 
+        $patient->pnic =request('pnic');
+        $patient->paddress =request('paddress');
+        $patient->ptel=request('ptel');
+        
+        $pass=request('ppassword');
+        $cpass=request('cpassword');
+        if ($pass == $cpass) 
+        {
+            $patient->ppassword = Hash::make($pass);
+        }
+
+        $patient->save();
+
+        return redirect()->back();
+    }
+
+    public function deleteAccount($email)
+    {
+        $user = User::where('email', 'LIKE' ,"%{$email}");
+        $patient=patient::where('pemail',$email);
+        $user->delete();
+        $patient->delete();
+        return redirect()->route('logout');
     }
 }

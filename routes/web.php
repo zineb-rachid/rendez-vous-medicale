@@ -41,3 +41,12 @@ Route::post('/patient/{id}/doctors', [PatientController::class, 'doctors'])->nam
 Route::get('/patient/{id}/appointments',[PatientController::class,'appointment'])->name('patient-appointments');
 
 Route::post('/patient/{id}/appointments',[PatientController::class,'appointment'])->name('patient-appointments_search');
+
+Route::get('/patient/{id}/Deleteappointments',[PatientController::class,'deleteAppointment'])->name('patient-appointments-delete');
+
+Route::get('/patient/{id}/settings',[PatientController::class,'settings'])->name('patient-settings');
+
+Route::put('/patient/settings/update/{pid}', [PatientController::class, 'update'])->name('patient-settings-update');
+
+Route::get('/patient/setting/deleteAccount/{email}', [PatientController::class, 'deleteAccount'])->name('patient-delete-account');
+

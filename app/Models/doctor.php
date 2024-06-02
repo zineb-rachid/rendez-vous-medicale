@@ -18,4 +18,8 @@ class doctor extends Model
     {
         return $this->belongsTo(specialities::class,'docspecialitie','sid');
     }
+    public function schedule()
+    {
+        return $this->hasMany(schedule::class ,'docid','docid');
+    }
 }
