@@ -85,7 +85,7 @@
                 </tr>
                 <tr class="menu-row">
                     <td class="menu-btn menu-icon-session">
-                        <a href="{{ url('schedule') }}" class="non-style-link-menu">
+                        <a href="{{route('patient-schedule',['id'=>$user->id])}}" class="non-style-link-menu">
                             <div><p class="menu-text">Scheduled Sessions</p></div>
                         </a>
                     </td>
@@ -173,8 +173,8 @@
                                                             <font class="tn-in-text">View</font>
                                                         </button>
                                                         &nbsp;&nbsp;&nbsp;
-                                                        <a href="{{ url('doctor/sessions', $doctor->docid) }}" class="non-style-link">
-                                                            <button class="btn-primary-soft btn button-icon menu-icon-session-active" style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
+                                                        <a class="non-style-link">
+                                                            <button class="btn-primary-soft btn button-icon menu-icon-session-active" style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;" onclick="schedule({{$doctor}})">
                                                                 <font class="tn-in-text">Sessions</font>
                                                             </button>
                                                         </a>
@@ -234,13 +234,31 @@
                 <p><strong>NIC:</strong> ${doctorDetails.docnic}</p><br/>
                 <p><strong>Telephone:</strong> ${doctorDetails.doctel}</p><br/>
                 <p><strong>Specialties:</strong> ${doctorDetails.specialities}</p><br/>
-                <a href="{{ route('patient_doctors', ['id' => $user->id]) }}"><input type="button" value="OK" class="login-btn btn-primary-soft btn"></a>
+                <a href="{{ route('patient_doctors', ['id' => $user->id]) }}">
+                    <input type="button" value="OK" class="login-btn btn-primary-soft btn">
+                </a>
             `;
             document.getElementById('popup1').style.display = 'flex';
         }
 
         function hidePopup() {
             document.getElementById('popup1').style.display = 'none';
+        }
+        function schedule(doctor)
+        {
+            document.getElementById('popup-content').innerHTML = `
+                        <div class="content">
+                            You want to view All sessions by <br>${doctor.docname}                            
+                        </div>
+                        <form  method="post" action="{{route('patient-schedule_search',['id'=>$user->id])}}" style="display: flex">
+                            @csrf
+                            <input type="hidden" name="search" value="${doctor.docname}">                                
+                            <div style="display: flex;justify-content:center;margin-left:45%;margin-top:6%;;margin-bottom:6%;">
+                            <input type="submit"  value="Yes" class="btn-primary btn" >
+                            </div>
+                        </form>
+            `;
+            document.getElementById('popup1').style.display = 'flex';
         }
     </script>
 </body>

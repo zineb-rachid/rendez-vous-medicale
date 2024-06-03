@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\PatientController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\signupController;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\doctorController;
+use App\Http\Controllers\signupController;
+use App\Http\Controllers\PatientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +17,11 @@ use Illuminate\Auth\Events\Logout;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/signup', function () {
-    return view('signup');
-});
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
+Route::get('/', function () {return view('welcome');});
+
+Route::get('/signup', function () {return view('signup');});
+
+Route::get('/login', function () { return view('login');})->name('login');
 
 Route::get('/logout', [signupController::class,'logout'])->name('logout');
 
@@ -50,3 +47,22 @@ Route::put('/patient/settings/update/{pid}', [PatientController::class, 'update'
 
 Route::get('/patient/setting/deleteAccount/{email}', [PatientController::class, 'deleteAccount'])->name('patient-delete-account');
 
+Route::get('/patient/{id}/schedules',[PatientController::class,'schedule'])->name('patient-schedule');
+
+Route::post('/patient/{id}/schedules',[PatientController::class,'schedule'])->name('patient-schedule_search');
+
+
+
+Route::get('/doctors/{id}', [doctorController::class, 'index'])->name('doctors_index');
+
+Route::get('/doctors/appointment/{id}', [doctorController::class, 'appointment'])->name('doctors_appointment');
+
+Route::post('/doctors/appointment/{id}', [doctorController::class, 'appointment'])->name('doctors_appointment_search');
+
+Route::get('/doctors/dropAppointment/{id}', [doctorController::class, 'dropApp'])->name('doctors_appointment_delete');
+
+Route::get('/doctors/schedule/{id}', [doctorController::class, 'index'])->name('doctors_schedule');
+
+Route::get('/doctors/patient/{id}', [doctorController::class, 'index'])->name('doctors_patient');
+
+Route::get('/doctors/setting/{id}', [doctorController::class, 'index'])->name('doctors_setting');

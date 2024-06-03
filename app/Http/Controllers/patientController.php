@@ -117,7 +117,7 @@ class PatientController extends Controller
         
         $pass=request('ppassword');
         $cpass=request('cpassword');
-        if ($pass == $cpass) 
+        if ($pass === $cpass) 
         {
             $patient->ppassword = Hash::make($pass);
         }
@@ -135,4 +135,40 @@ class PatientController extends Controller
         $patient->delete();
         return redirect()->route('logout');
     }
+    public function schedule($id)
+    {
+        $today = now()->format('Y-m-d');
+        $user = User::find($id);
+        $username = $user->name;
+        $useremail = $user->email;
+        $search = request('search');
+
+        if ($search) {
+            $doctor = doctor::where('docname', $search)
+                            ->orWhere('docemail', 'LIKE', "%{$search}%")
+                            ->first();
+
+            if ($doctor) {
+                $schedule = schedule::where('docid', $doctor->docid)
+                                    ->orWhere('scheduledate', 'LIKE', "%{$search}%")
+                                    ->get();
+            } 
+            elseif (strtotime($search) !== false) 
+            {
+                $schedule = schedule::where('scheduledate', 'LIKE', "%{$search}%")->get();
+            }
+            else {
+                $schedule = schedule::where('title', 'LIKE', "%{$search}%")->get();
+            }
+        }
+        else
+        {
+            $schedule = schedule::all();
+        }
+
+        $countS = $schedule->count();
+
+        return view('patient.schedule', compact('today', 'user', 'username', 'useremail', 'schedule', 'countS'));
+    }
+
 }

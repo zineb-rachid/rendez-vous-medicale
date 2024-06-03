@@ -59,7 +59,7 @@ class SignupController extends Controller
                 }
                  elseif ($user->role == 'd') 
                  {
-                    return redirect()->route('doctor_index');
+                    return redirect()->route('doctors_index',['id'=>$user]);
                 }
                  elseif ($user->role == 'a') 
                  {

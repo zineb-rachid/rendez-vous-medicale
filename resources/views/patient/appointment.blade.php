@@ -84,7 +84,7 @@
                 </tr>
                 <tr class="menu-row">
                     <td class="menu-btn menu-icon-session">
-                        <a href="{{ url('schedule') }}" class="non-style-link-menu">
+                        <a href="{{route('patient-schedule',['id'=>$user->id])}}" class="non-style-link-menu">
                             <div><p class="menu-text">Scheduled Sessions</p></div>
                         </a>
                     </td>

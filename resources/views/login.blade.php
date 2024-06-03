@@ -53,8 +53,9 @@
             </tr>
 
             <tr>
-                <td class="label-td">
-                    <input type="Password" name="userpassword" class="input-text" placeholder="Password" required>
+                <td class="label-td" style="display: flex">
+                    <input type="Password" name="userpassword" class="input-text" placeholder="Password" onclick='togglePassword()' required>
+                    <img src=' {{asset('/img/icons/eye.svg')}} ' class='toggle-password' onclick='togglePassword()'>
                 </td>
             </tr>
 
@@ -93,3 +94,15 @@
 </center>
 </body>
 </html>
+<script>
+     function togglePassword(){
+                const input = event.target.previousElementSibling;
+                if (input.type == "password") {
+                    input.type = "text";
+                    event.target.src = "{{ asset('/img/icons/eye-off.svg') }}";
+                } else {
+                    input.type = "password";
+                    event.target.src = "{{ asset('/img/icons/eye.svg') }}";
+                }
+            }
+</script>

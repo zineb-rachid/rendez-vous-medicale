@@ -108,9 +108,13 @@
                 </td>
             </tr>
             <tr>
-                <td class="label-td" colspan="2">
-                    <input type="password" name="ppassword" class="input-text" required>
-                    @error('ppassword')
+                <td class="label-td" colspan="2" style="display: flex">
+                    <input type="password" name="ppassword" class="input-text" onclick='togglePassword()' required>
+                    <img src=' {{asset('/img/icons/eye.svg')}} ' class='toggle-password' onclick='togglePassword()'>
+                </td>
+            </tr>
+            <tr>
+               <td class="label-td" > @error('ppassword')
                     <span>{{ $message }}</span>
                     @enderror
                 </td>
@@ -129,7 +133,7 @@
             <tr>
                 <td colspan="2">
                     <br>
-                    <label for="" class="sub-text" style="font-weight: 280;">Already have an account&#63; </label>
+                    <label class="sub-text" style="font-weight: 280;">Already have an account&#63; </label>
                     <a href="{{ url('login') }}" class="hover-link1 non-style-link">Login</a>
                     <br><br><br>
                 </td>
@@ -141,3 +145,15 @@
     </center>
 </body>
 </html>
+<script>
+    function togglePassword(){
+               const input = event.target.previousElementSibling;
+               if (input.type == "password") {
+                   input.type = "text";
+                   event.target.src = "{{ asset('/img/icons/eye-off.svg') }}";
+               } else {
+                   input.type = "password";
+                   event.target.src = "{{ asset('/img/icons/eye.svg') }}";
+               }
+           }
+</script>

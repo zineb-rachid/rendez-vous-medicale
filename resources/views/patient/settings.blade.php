@@ -108,7 +108,7 @@
                 </tr>
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-session">
-                        <a href="" class="non-style-link-menu"><div><p class="menu-text">Scheduled Sessions</p></div></a>
+                        <a href="{{route('patient-schedule',['id'=>$user->id])}}" class="non-style-link-menu"><div><p class="menu-text">Scheduled Sessions</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row" >
@@ -307,7 +307,7 @@
                                         <td class='label-td' colspan='2'>
                                             <div class='password-container'>
                                                 <input type='password' name='ppassword' class='input-text' placeholder='Password' required>
-                                                <img src='" . asset('/img/icons/eye.svg') . "' class='toggle-password'>
+                                                <img src='" . asset('/img/icons/eye.svg') . "' class='toggle-password' onclick='togglePassword()'>
                                             </div>
                                         </td>
                                     </tr>
@@ -320,7 +320,7 @@
                                         <td class='label-td' colspan='2'>
                                             <div class='password-container'>
                                                 <input type='password' name='cpassword' class='input-text' placeholder='Confirm Password' required>
-                                                <img src='" . asset('/img/icons/eye.svg') . "' class='toggle-password'>
+                                                <img src='" . asset('/img/icons/eye.svg') . "' class='toggle-password' onclick='togglePassword()'>
                                             </div>
                                         </td>
                                     </tr>                                    
@@ -464,10 +464,11 @@
                 <button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;">
                     <font class="tn-in-text">&nbsp;&nbsp;No&nbsp;&nbsp;</font></button></a>
             </div>`;
+            
             document.getElementById('popup1').style.display = "flex";
         }
-        document.querySelectorAll('toggle-password').forEach(item => {
-            item.addEventListener('click', event => {
+
+        function togglePassword(){
                 const input = event.target.previousElementSibling;
                 if (input.type == "password") {
                     input.type = "text";
@@ -476,8 +477,7 @@
                     input.type = "password";
                     event.target.src = "{{ asset('/img/icons/eye.svg') }}";
                 }
-            });
-        });
+            }
     </script>
 </body>
 </html>

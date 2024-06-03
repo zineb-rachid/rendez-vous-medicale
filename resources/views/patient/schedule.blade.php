@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <title>Sessions</title>
+    <style>
+        .popup {
+            animation: transitionIn-Y-bottom 0.5s;
+        }
+        .sub-table {
+            animation: transitionIn-Y-bottom 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="menu">
+            <table class="menu-container" border="0">
+                <tr>
+                    <td style="padding:10px" colspan="2">
+                        <table border="0" class="profile-container">
+                            <tr>
+                                <td width="30%" style="padding-left:20px">
+                                    <img src="{{ asset('img/user.png') }}" alt="" width="100%" style="border-radius:50%">
+                                </td>
+                                <td style="padding:0px;margin:0px;">
+                                    <p class="profile-title">{{ Str::limit($username, 13) }}..</p>
+                                    <p class="profile-subtitle">{{ Str::limit($username, 13) }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <a href="{{route('logout')}}"><input type="button" value="Log out" class="logout-btn btn-primary-soft btn"></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-home">
+                        <a href="{{ route('patient_index', ['id' => $user->id]) }}" class="non-style-link-menu">
+                            <div>
+                                <p class="menu-text">Home</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-doctor">
+                        <a href="{{ route('patient_doctors', ['id' => $user->id]) }}" class="non-style-link-menu">
+                            <div>
+                                <p class="menu-text">All Doctors</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-session menu-active menu-icon-session-active">
+                        <a href="{{ route('patient-schedule', ['id' => $user->id]) }}" class="non-style-link-menu non-style-link-menu-active">
+                            <div>
+                                <p class="menu-text">Scheduled Sessions</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-appoinment">
+                        <a href="{{ route('patient-appointments', ['id' => $user->id]) }}" class="non-style-link-menu">
+                            <div>
+                                <p class="menu-text">My Bookings</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-settings">
+                        <a href="{{ route('patient-settings', ['id' => $user->id]) }}" class="non-style-link-menu">
+                            <div>
+                                <p class="menu-text">Settings</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="dash-body">
+            <table border="0" width="100%" style="border-spacing: 0; margin:0; padding:0; margin-top:25px;">
+                <tr>
+                    <td width="13%">
+                        <a href="{{ route('patient-schedule', ['id' => $user->id]) }}">
+                            <button class="login-btn btn-primary-soft btn btn-icon-back" style="padding-top:11px; padding-bottom:11px; margin-left:20px; width:125px">
+                                <font class="tn-in-text">Back</font>
+                            </button>
+                        </a>
+                    </td>
+                    <td>
+                        <form action="{{ route('patient-schedule_search', ['id' => $user->id]) }}" method="post" class="header-search">
+                            @csrf
+                            <input type="search" name="search" class="input-text header-searchbar" placeholder="Search Doctor name or Email or Date (YYYY-MM-DD)" list="doctors" value="">&nbsp;&nbsp;
+                            <input type="submit" value="Search" name="btn" class="login-btn btn-primary btn" style="padding-left: 25px; padding-right: 25px; padding-top: 10px; padding-bottom: 10px;">
+                        </form>
+                    </td>
+                    <td width="15%">
+                        <p style="font-size: 14px; color: rgb(119, 119, 119); padding: 0; margin: 0; text-align: right;">Today's Date</p>
+                        <p class="heading-sub12" style="padding: 0; margin: 0;">{{ $today }}</p>
+                    </td>
+                    <td width="10%">
+                        <button class="btn-label" style="display: flex; justify-content: center; align-items: center;">
+                            <img src="{{ asset('img/calendar.svg') }}" width="100%">
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="padding-top:10px; width: 100%;">
+                        <p class="heading-main12" style="margin-left: 45px; font-size:18px; color:rgb(49, 49, 49)">All Sessions ({{ $countS }})</p>
+                        <p class="heading-main12" style="margin-left: 45px;font-size:22px;color:rgb(49, 49, 49)"> 
+                            @php
+                                if(isset($_POST['btn'])){
+                                    $write = $_POST['search'];
+                                    echo $write ;
+                                }
+                            @endphp
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <center>
+                            <div class="abc ">
+                                <table width="100%" class="sub-table scrolldown" border="0" style="padding: 50px; border:none;">
+                                    <tbody>
+                                        @forelse ($schedule as $sc)
+                                            <tr>
+                                                <td style="width: 25%;">
+                                                    <div class="dashboard-items search-items">
+                                                        <div style="width:100%">
+                                                            <div class="h1-search">
+                                                                {{ $sc->title }}
+                                                            </div>
+                                                            <br>
+                                                            <div class="h3-search">
+                                                                {{ $sc->doctor->docname }}
+                                                            </div>
+                                                            <div class="h4-search">
+                                                                {{ $sc->scheduledate }}<br>Starts: <b>@ {{ substr($sc->scheduletime, 0, 5) }}</b> (8h)
+                                                            </div>
+                                                            <br>
+                                                            <a href="">
+                                                                <button class="login-btn btn-primary-soft btn" style="padding-top:11px; padding-bottom:11px; width:100%;">
+                                                                    <font class="tn-in-text">Book Now</font>
+                                                                </button>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4">
+                                                    <br><br><br><br>
+                                                    <center>
+                                                        <img src="{{ asset('img/notfound.png') }}" width="25%">
+                                                        <br>
+                                                        <p class="heading-main12" style="margin-left: 45px; font-size:20px; color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
+                                                        <a class="non-style-link" href="{{ route('patient-schedule', ['id' => $user->id]) }}">
+                                                            <button class="login-btn btn-primary-soft btn" style="display: flex; justify-content: center; align-items: center; margin-left:20px;">
+                                                                &nbsp; Show all Sessions &nbsp;
+                                                            </button>
+                                                        </a>
+                                                    </center>
+                                                    <br><br><br><br>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>                        
+                            </div>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

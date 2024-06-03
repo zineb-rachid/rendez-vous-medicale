@@ -64,7 +64,7 @@
                 
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-session">
-                        <a href="" class="non-style-link-menu"><div><p class="menu-text">Scheduled Sessions</p></div></a>
+                        <a href="{{route('patient-schedule',['id'=>$user->id])}}" class="non-style-link-menu"><div><p class="menu-text">Scheduled Sessions</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row" >
@@ -122,18 +122,12 @@
                             </p>
                             
                             <h3>Channel a Doctor Here</h3>
-                            <form action="schedule.php" method="post" style="display: flex">
-
+                            <form action="{{route('patient-schedule',['id'=>$user->id])}}" method="post" style="display: flex">
+                                @csrf
                                 <input type="search" name="search" class="input-text " placeholder="Search Doctor and We will Find The Session Available" list="doctors" style="width:45%;">&nbsp;&nbsp;
-                                
-                                
-                                
-                           
                                 <input type="Submit" value="Search" class="login-btn btn-primary btn" style="padding-left: 25px;padding-right: 25px;padding-top: 10px;padding-bottom: 10px;">
-                            
                             <br>
                             <br>
-                            
                         </td>
                     </tr>
                     </table>
@@ -239,14 +233,31 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($upcomingBookings as $booking )
+                                        @forelse ($upcomingBookings as $booking )
                                             <tr>
                                                 <td>{{$booking->appnum}} </td>
                                                 <td>{{$booking->title}} </td>
                                                 <td>{{$booking->docname}} </td>
                                                 <td>{{$booking->scheduledate}} {{$booking->scheduletime}}</td>
                                             </tr>
-                                        @endforeach                                                                       
+
+                                        @empty
+                                        <tr>
+                                            <td colspan="4">
+                                            <br><br><br><br>
+                                            <center>
+                                            <img src="{{ asset('img/notfound.png') }}" width="25%">
+                                            
+                                            <br>
+                                            <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">Nothing to show here!</p>
+                                            <a class="non-style-link" href="{{route('patient-schedule',['id'=>$user->id])}}"><button  class="login-btn btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp; Channel a Doctor &nbsp;</font></button>
+                                            </a>
+                                            </center>
+                                            <br><br><br><br>
+                                            </td>
+                                        </tr>
+                                        @endforelse 
+
                                             </tbody>
                 
                                         </table>
