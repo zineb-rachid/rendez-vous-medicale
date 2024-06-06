@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\specialities;
+use Illuminate\Database\DBAL\TimestampType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -14,6 +15,7 @@ class doctor extends Model
     ];
     protected $table="doctor";
     protected $primaryKey="docid";
+    public $timestamps=false;
     public function specialities()
     {
         return $this->belongsTo(specialities::class,'docspecialitie','sid');

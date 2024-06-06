@@ -149,9 +149,6 @@ body{
     color: rgb(43, 43, 43);
 }
 
-
-
-
 .btn-label{
     margin-left: 10px;
     padding: 12px 12px;
@@ -166,11 +163,9 @@ body{
     font-family: 'Inter', sans-serif;
 }
 
-
 .sub-table{
     border: 1px solid #ebebeb;
-    border-radius: 8px;
-    
+    border-radius: 8px;   
 }
 
 .filter-container{
@@ -591,4 +586,50 @@ input[type=search]:focus {
   background-position: 68% 50%;
   background-repeat: no-repeat;
   transition: 0.5s;
+}
+.time-slots-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.time-slot-btn {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.time-slot-btn.disabled {
+  background-color: #dc3545;
+  color: white;
+  cursor: not-allowed;
+  margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+
+}
+
+.time-slot-btn:hover:not(.disabled) {
+  background-color: #0056b3;
+}
+.time-slot-button.selected-slot {
+  background-color: rgb(45, 4, 193);
+  color: white;
+}
+.time-slot-button.unavailable-slot {
+  background-color: red;
+  color: white;
+  cursor: not-allowed;
+}
+.book-button {
+  padding-top: 11px;
+  padding-bottom: 11px;
+  width: 100%;
 }

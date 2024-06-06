@@ -165,13 +165,13 @@
                 <tr>
                     <td colspan="4">
                         <center>
-                            <div class="abc scroll">
-                                <table width="93%" class="sub-table scrolldown" border="0" style="border:none">                        
+                            <div class="abc scroll" >
+                                <table width="93%" class="sub-table scrolldown" border="0" style="border:none;">                        
                                     <tbody> 
                                         <tr>
                                             <td style="width: 25%;">
                                                 @forelse($appointments as $app)                                                
-                                                <div class="dashboard-items search-items">
+                                                <div class="dashboard-items search-items" > 
                                                     <div style="width:100%;">
                                                         <div class="h3-search">
                                                             Booking Date: {{$app->appdate}} <br>
@@ -263,7 +263,7 @@
     
             document.getElementById('popup1').style.display = "flex";
     
-            // Set the href for the cancel link
+            
             document.getElementById('cancelLink').href = "{{ route('patient-appointments-delete', ['id' => ':id']) }}".replace(':id', app.appid);
         }
     

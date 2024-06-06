@@ -11,6 +11,7 @@ class schedule extends Model
     use HasFactory;
     protected $table='schedule';
     protected $primaryKey="scheduleid";
+    public $timestamps=false;
     public function appointment()
     {
         return $this->hasMany(appointment::class ,'scheduleid','scheduleid');

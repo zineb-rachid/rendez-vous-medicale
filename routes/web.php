@@ -51,7 +51,7 @@ Route::get('/patient/{id}/schedules',[PatientController::class,'schedule'])->nam
 
 Route::post('/patient/{id}/schedules',[PatientController::class,'schedule'])->name('patient-schedule_search');
 
-
+Route::get('/patient/{id}/schedules/{schedule}/{time}',[PatientController::class,'booking'])->name('patient-schedule-booking');
 
 Route::get('/doctors/{id}', [doctorController::class, 'index'])->name('doctors_index');
 
@@ -65,4 +65,8 @@ Route::get('/doctors/schedule/{id}', [doctorController::class, 'index'])->name('
 
 Route::get('/doctors/patient/{id}', [doctorController::class, 'index'])->name('doctors_patient');
 
-Route::get('/doctors/setting/{id}', [doctorController::class, 'index'])->name('doctors_setting');
+Route::get('/doctors/setting/{id}', [doctorController::class, 'setting'])->name('doctors_setting');
+
+Route::get('/doctors/deleteAccount/{email}', [doctorController::class, 'deleteAccount'])->name('doctors_delete-account');
+
+Route::put('/doctors/settings/update/{docid}',[doctorController::class,'accountUpdate'])->name('doctors_setting_update');

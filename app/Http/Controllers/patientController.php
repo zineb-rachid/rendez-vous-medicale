@@ -46,7 +46,7 @@ class PatientController extends Controller
             ]);
         return view('patient.index', compact('username', 'useremail', 'user', 'today', 'doctorCount', 'patientCount', 'appointmentCount', 'scheduleCount', 'upcomingBookings'));
     }
-    public function doctors($id, Request $request)
+    public function doctors($id)
     {
         $today = now()->format('Y-m-d');
         $user = user::find($id);
@@ -106,31 +106,44 @@ class PatientController extends Controller
 
         return view('patient.settings',compact('today' ,'user' ,'useremail' , 'username','patient'));
     }
-    public function update( $pid)
+    public function update($pid)
     {
-        $patient = patient::find($pid);
+        $patient = Patient::find($pid);
+
+        if (!$patient) {
+            return redirect()->back()->withErrors(['error' => 'Patient not found.']);
+        }
+
         $patient->pname = request('pname');
-        $patient->pemail =request('pemail'); 
-        $patient->pnic =request('pnic');
-        $patient->paddress =request('paddress');
-        $patient->ptel=request('ptel');
+        $patient->pemail = request('pemail');
+        $patient->pnic = request('pnic');
+        $patient->paddress = request('paddress');
+        $patient->ptel = request('ptel');
+
+        $pass = request('ppassword');
+        $cpass = request('cpassword');
         
-        $pass=request('ppassword');
-        $cpass=request('cpassword');
         if ($pass === $cpass) 
         {
             $patient->ppassword = Hash::make($pass);
+        } 
+        else 
+        {
+            return redirect()->back()->withErrors(['error' => 'Password confirmation error! Reconfirm password.']);
         }
 
         $patient->save();
-
-        return redirect()->back();
+        
+        return redirect()->back()->with('success', 'Patient details updated successfully.');
     }
+
 
     public function deleteAccount($email)
     {
-        $user = User::where('email', 'LIKE' ,"%{$email}");
-        $patient=patient::where('pemail',$email);
+        $user = User::where('email', 'LIKE' ,"%{$email}")->first();
+        $patient=patient::where('pemail',$email)->first();
+        $app=DB::table('appointment')->where('pid',$patient->pid);
+        $app->delete();
         $user->delete();
         $patient->delete();
         return redirect()->route('logout');
@@ -165,10 +178,29 @@ class PatientController extends Controller
         {
             $schedule = schedule::all();
         }
-
+        
         $countS = $schedule->count();
 
         return view('patient.schedule', compact('today', 'user', 'username', 'useremail', 'schedule', 'countS'));
     }
-
+    public function booking($id,$schedule,$time)
+    {
+        $user=user::find($id);
+        $useremail=$user->email;
+        $patient=patient::where('pemail',$useremail)->first();
+        $maxAppNum=appointment::max('appnum');
+        $Fschedule=schedule::find($schedule);
+        $scheduledate=$Fschedule->scheduledate;
+        if (is_null($maxAppNum)) {
+            $maxAppNum = 0; 
+        }
+        $appointment=new appointment();
+        $appointment->pid=$patient->pid;
+        $appointment->appnum=$maxAppNum + 1;
+        $appointment->scheduleid=$schedule;
+        $appointment->appdate=$scheduledate;
+        $appointment->apptime=$time;
+        $appointment->save();
+        return redirect()->route('patient-schedule',['id'=>$id]);
+    }
 }

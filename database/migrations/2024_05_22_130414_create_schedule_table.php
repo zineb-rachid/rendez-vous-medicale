@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->date('scheduledate');
             $table->time("scheduletime");
-            $table->integer('nop');
+            //$table->integer('nop');
             $table->foreign('docid')->references("docid")->on('doctor');
         });
     }

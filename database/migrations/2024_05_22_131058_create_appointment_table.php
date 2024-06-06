@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('scheduleid');
             $table->foreign('scheduleid')->references('scheduleid')->on('schedule');
             $table->date('appdate');
+            $table->time('apptime');
         });
     }
 

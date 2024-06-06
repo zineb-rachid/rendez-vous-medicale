@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
@@ -15,6 +15,34 @@
         .sub-table {
             animation: transitionIn-Y-bottom 0.5s;
         }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            margin-top: 15%;
+        }
+        .close {
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+        }
+        
     </style>
 </head>
 <body>
@@ -35,7 +63,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <a href="{{route('logout')}}"><input type="button" value="Log out" class="logout-btn btn-primary-soft btn"></a>
+                                    <a href="{{ route('logout') }}"><input type="button" value="Log out" class="logout-btn btn-primary-soft btn"></a>
                                 </td>
                             </tr>
                         </table>
@@ -119,7 +147,7 @@
                 <tr>
                     <td colspan="4" style="padding-top:10px; width: 100%;">
                         <p class="heading-main12" style="margin-left: 45px; font-size:18px; color:rgb(49, 49, 49)">All Sessions ({{ $countS }})</p>
-                        <p class="heading-main12" style="margin-left: 45px;font-size:22px;color:rgb(49, 49, 49)"> 
+                        <p class="heading-main12" style="margin-left: 45px;font-size:22px;color:rgb(49, 49, 49)">
                             @php
                                 if(isset($_POST['btn'])){
                                     $write = $_POST['search'];
@@ -151,7 +179,7 @@
                                                                 {{ $sc->scheduledate }}<br>Starts: <b>@ {{ substr($sc->scheduletime, 0, 5) }}</b> (8h)
                                                             </div>
                                                             <br>
-                                                            <a href="">
+                                                            <a href="#" onclick="book({{ json_encode($sc) }},{{$sc->appointment->pluck('apptime')}})">
                                                                 <button class="login-btn btn-primary-soft btn" style="padding-top:11px; padding-bottom:11px; width:100%;">
                                                                     <font class="tn-in-text">Book Now</font>
                                                                 </button>
@@ -176,10 +204,10 @@
                                                     </center>
                                                     <br><br><br><br>
                                                 </td>
-                                            </tr>
+                                            </tr>                                            
                                         @endforelse
                                     </tbody>
-                                </table>                        
+                                </table>
                             </div>
                         </center>
                     </td>
@@ -187,5 +215,73 @@
             </table>
         </div>
     </div>
+
+    <div id="popup1" class="overlay">
+        <div class="popup">
+            <a class="close" onclick="hidePopup()">&times;</a>
+            <div id="popup-content"></div>
+        </div>
+    </div>
+
+    <script>
+        function book(schedule, appointments) {
+            let startTime = schedule.scheduletime.substring(0, 5);
+            let startHour = parseInt(startTime.split(':')[0]);
+            let duration = 9;
+            let availableSlots = '';
+
+            for (let i = 0; i < duration; i++) {
+                let hour = startHour + i;
+                let timeSlot = ('0' + hour).slice(-2) + ':00';
+                if (appointments.includes(timeSlot + ':00')) {
+                    availableSlots += `
+                        <button class="time-slot-button unavailable-slot btn" disabled>
+                            ${timeSlot}
+                        </button>
+                    `;
+                } else {
+                    availableSlots += `
+                        <button onclick="bookSlot('${schedule.scheduleid}', '${timeSlot}', this)" class="time-slot-button btn btn-primary">
+                            ${timeSlot}
+                        </button>
+                    `;
+                }
+            }
+
+            document.getElementById('popup-content').innerHTML = `
+                <h2>Available Slots</h2><br/>
+                <div class="time-slots-container">
+                    ${availableSlots}
+                </div><br/><br/>
+                <a id="myRoute"  onClick="booked()">
+                    <button class="book-button btn-primary-soft btn">
+                        <font class="tn-in-text">Book</font>
+                    </button>
+                </a>
+            `;
+
+            document.getElementById('popup1').style.display = "flex";
+        }
+
+        function hidePopup() {
+            document.getElementById('popup1').style.display = "none";
+        }
+
+        function bookSlot(scheduleId, timeSlot, element) {
+            const buttons = document.querySelectorAll('.time-slot-button');
+            buttons.forEach(button => button.classList.remove('selected-slot'));
+
+            element.classList.add('selected-slot');
+
+            const routeUrl = `/patient/{{ $user->id }}/schedules/${scheduleId}/${timeSlot}`;
+            document.getElementById('myRoute').href = routeUrl;
+        }
+
+        function booked() {
+            alert('Booked Successfuly! ')
+            document.getElementById('popup1').style.display = "flex";
+        }
+    </script>
+    
 </body>
 </html>

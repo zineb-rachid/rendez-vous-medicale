@@ -227,7 +227,7 @@
         echo "<div id='popup1' class='overlay' style='display:flex'>
         <div class='popup'>
             <center>
-                <a class='close' onclick='hidePopup()'>&times;</a>
+                <a href=".route('patient-settings',['id' => $user->id])." class='close'>&times;</a>
                 <div id='popup-content' class='content'>
                     <div style='display: flex;justify-content: center;'>
                             <div class='abc'>
@@ -324,10 +324,22 @@
                                             </div>
                                         </td>
                                     </tr>                                    
-                                    
+                                    <tr>
+                                        <td>
+                                            "  @endphp
+                                            @if ($errors)
+                                            <label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">
+                                                @foreach ($errors->all() as $error)
+                                                    <p>{{ $error }}</p>
+                                                @endforeach
+                                            </label>
+                                            @endif
+                                            @php echo "
+                                        </td>
+                                    </tr> 
                                     <tr>
                                         <td colspan='2'>
-                                            <input type='reset' value='Reset' onclick='hidePopup()' class='login-btn btn-primary-soft btn' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <input type='reset' value='Reset'  class='login-btn btn-primary-soft btn' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         
                                             <input type='submit' value='Save'  class='login-btn btn-primary btn'>
                                         </td>
@@ -464,7 +476,7 @@
                 <button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;">
                     <font class="tn-in-text">&nbsp;&nbsp;No&nbsp;&nbsp;</font></button></a>
             </div>`;
-            
+
             document.getElementById('popup1').style.display = "flex";
         }
 

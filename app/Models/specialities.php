@@ -10,6 +10,7 @@ class specialities extends Model
     use HasFactory;
     protected $table='specialities';
     protected $primaryKey='sid';
+    public $timestamps=false;
     protected $fillable=['sid','sname'];
     public function doctor()
     {
