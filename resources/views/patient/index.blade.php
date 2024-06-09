@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/animations.css">  
-    <link rel="stylesheet" href="../css/main.css">  
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/admin.css">
-    
-        
+
+
     <title>Dashboard</title>
     <style>
         .dashbord-tables{
@@ -21,11 +21,11 @@
             animation: transitionIn-Y-bottom 0.5s;
         }
     </style>
-    
-    
+
+
 </head>
 <body>
-    
+
     <div class="container">
         <div class="menu">
             <table class="menu-container" border="0">
@@ -61,7 +61,7 @@
                         <a href="{{route('patient_doctors',['id'=>$user])}}" class="non-style-link-menu"><div><p class="menu-text">All Doctors</p></a></div>
                     </td>
                 </tr>
-                
+
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-session">
                         <a href="{{route('patient-schedule',['id'=>$user->id])}}" class="non-style-link-menu"><div><p class="menu-text">Scheduled Sessions</p></div></a>
@@ -77,17 +77,17 @@
                         <a href="{{route('patient-settings',['id'=>$user->id])}}" class="non-style-link-menu"><div><p class="menu-text">Settings</p></a></div>
                     </td>
                 </tr>
-            
+
             </table>
         </div>
         <div class="dash-body" style="margin-top: 15px">
             <table border="0" width="100%" style=" border-spacing: 0;margin:0;padding:0;" >
-                        
+
                         <tr >
-                            
+
                             <td colspan="1" class="nav-bar" >
                             <p style="font-size: 23px;padding-left:12px;font-weight: 600;margin-left:20px;">Home</p>
-                          
+
                             </td>
                             <td width="25%">
 
@@ -103,24 +103,24 @@
                             <td width="10%">
                                 <button  class="btn-label"  style="display: flex;justify-content: center;align-items: center;"><img src="../img/calendar.svg" width="100%"></button>
                             </td>
-        
-        
+
+
                         </tr>
                 <tr>
                     <td colspan="4" >
-                        
+
                     <center>
                     <table class="filter-container doctor-header patient-header" style="border: none;width:95%" border="0" >
                     <tr>
                         <td >
                             <h3>Welcome!</h3>
                             <h1> {{$username}} </h1>
-                            <p>Haven't any idea about doctors? no problem let's jumping to 
-                                <a href="doctors.php" class="non-style-link"><b>"All Doctors"</b></a> section or 
+                            <p>Haven't any idea about doctors? no problem let's jumping to
+                                <a href="doctors.php" class="non-style-link"><b>"All Doctors"</b></a> section or
                                 <a href="schedule.php" class="non-style-link"><b>"Sessions"</b> </a><br>
                                 Track your past and future appointments history.<br>Also find out the expected arrival time of your doctor or medical consultant.<br><br>
                             </p>
-                            
+
                             <h3>Channel a Doctor Here</h3>
                             <form action="{{route('patient-schedule',['id'=>$user->id])}}" method="post" style="display: flex">
                                 @csrf
@@ -132,7 +132,7 @@
                     </tr>
                     </table>
                     </center>
-                    
+
                 </td>
                 </tr>
                 <tr>
@@ -190,7 +190,7 @@
                                                         </div>
                                                                 <div class="btn-icon-back dashboard-icons" style="margin-left: 0px;background-image: url('../img/icons/book-hover.svg');"></div>
                                                     </div>
-                                                    
+
                                                 </td>
 
                                                 <td style="width: 25%;">
@@ -206,7 +206,7 @@
                                                                 <div class="btn-icon-back dashboard-icons" style="background-image: url('../img/icons/session-iceblue.svg');"></div>
                                                     </div>
                                                 </td>
-                                                
+
                                             </tr>
                                         </table>
                                     </center>
@@ -216,20 +216,20 @@
                                     <center>
                                         <div class="abc scroll" style="height: 250px;padding: 0;margin: 0;">
                                         <table width="85%" class="sub-table scrolldown" border="0" >
-                                        <thead>                                            
+                                        <thead>
                                             <tr>
-                                                <th class="table-headin">                                                                                                  
-                                                    Appoint. Number                                                    
+                                                <th class="table-headin">
+                                                    Appoint. Number
                                                 </th>
-                                                <th class="table-headin">                                                                                              
-                                                Session Title                                                
-                                                </th>                                                
+                                                <th class="table-headin">
+                                                Session Title
+                                                </th>
                                                 <th class="table-headin">
                                                     Doctor
                                                 </th>
-                                                <th class="table-headin">                                                
+                                                <th class="table-headin">
                                                     Sheduled Date & Time
-                                                </th>        
+                                                </th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -247,19 +247,21 @@
                                             <br><br><br><br>
                                             <center>
                                             <img src="{{ asset('img/notfound.png') }}" width="25%">
-                                            
+
                                             <br>
                                             <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">Nothing to show here!</p>
-                                            <a class="non-style-link" href="{{route('patient-schedule',['id'=>$user->id])}}"><button  class="login-btn btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp; Channel a Doctor &nbsp;</font></button>
+                                            <a class="non-style-link" href="{{route('patient-schedule',['id'=>$user->id])}}">
+                                                <button  class="login-btn btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">
+                                                    <font>&nbsp; Channel a Doctor &nbsp;</font></button>
                                             </a>
                                             </center>
                                             <br><br><br><br>
                                             </td>
                                         </tr>
-                                        @endforelse 
+                                        @endforelse
 
                                             </tbody>
-                
+
                                         </table>
                                         </div>
                                         </center>

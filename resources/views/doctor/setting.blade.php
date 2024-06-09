@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-        
+
     <title>Settings</title>
     <style>
         .dashbord-tables {
@@ -71,7 +71,7 @@
 </style>
 </head>
 <body>
-    
+
     <div class="container">
         <div class="menu">
         <table class="menu-container" border="0">
@@ -105,7 +105,7 @@
                         <a href="{{route('doctors_appointment',['id'=>$user->id])}}"  class="non-style-link-menu "><div><p class="menu-text">My Appointments</p></a></div>
                     </td>
                 </tr>
-                
+
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-session">
                         <a href="{{route('doctors_schedule',['id'=>$user->id])}}" class="non-style-link-menu"><div><p class="menu-text">My Sessions</p></div></a>
@@ -121,7 +121,7 @@
                         <a href="{{route('doctors_setting',['id'=>$user->id])}}" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Settings</p></a></div>
                     </td>
                 </tr>
-                
+
             </table>
         </div>
         <div class="dash-body">
@@ -132,7 +132,7 @@
                     </td>
                     <td>
                         <p style="font-size: 23px;padding-left:12px;font-weight: 600;">Settings</p>
-                                           
+
                     </td>
                     <td width="15%">
                         <p style="font-size: 14px;color: rgb(119, 119, 119);padding: 0;margin: 0;text-align: right;">
@@ -161,15 +161,15 @@
                                             <div>
                                                     <div class="h1-dashboard">
                                                         Account Settings  &nbsp;
-    
+
                                                     </div><br>
                                                     <div class="h3-dashboard" style="font-size: 15px;">
                                                         Edit your Account Details & Change Password
                                                     </div>
-                                            </div>                                                    
+                                            </div>
                                         </div>
                                         </a>
-                                    </td>                                                                     
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td colspan="4">
@@ -184,17 +184,17 @@
                                             <div>
                                                     <div class="h1-dashboard" >
                                                         View Account Details
-                                                        
+
                                                     </div><br>
                                                     <div class="h3-dashboard"  style="font-size: 15px;">
                                                         View Personal information About Your Account
                                                     </div>
                                             </div>
-                                                    
+
                                         </div>
                                         </a>
                                     </td>
-                                    
+
                                 </tr>
                                 <tr>
                                     <td colspan="4">
@@ -209,20 +209,20 @@
                                             <div>
                                                     <div class="h1-dashboard" style="color: #ff5050;">
                                                         Delete Account
-                                                        
+
                                                     </div><br>
                                                     <div class="h3-dashboard"  style="font-size: 15px;">
                                                         Will Permanently Remove your Account
                                                     </div>
-                                            </div>                                                    
+                                            </div>
                                         </div>
                                         </a>
-                                    </td>                                    
+                                    </td>
                                 </tr>
                             </table>
                         </center>
                     </td>
-                </tr>  
+                </tr>
             </table>
         </div>
     </div>
@@ -238,7 +238,7 @@
                 <div id='popup-content' class='content'>
                     <div style='display: flex;justify-content: center;'>
                             <div class='abc'>
-                                <table width='80%' class='sub-table scrolldown add-doc-form-container' border='0'> 
+                                <table width='80%' class='sub-table scrolldown add-doc-form-container' border='0'>
                                     <form  action=".route('doctors_setting_update',['docid'=>$doctor->docid]) . " method='POST' class='add-new-form'>";
                                         @endphp
                                         @csrf
@@ -252,7 +252,7 @@
                                     </tr>
                                     <tr>
                                         <td class='label-td' colspan='2'>
-                                           
+
                                             <label for='Email' class='form-label'>Email: </label>
                                         </td>
                                     </tr>
@@ -262,7 +262,7 @@
                                         <input type='email' name='docemail' class='input-text' placeholder='Email Address' value='".$doctor->docemail."' required><br>
                                         </td>
                                     <tr>
-                                        
+
                                         <td class='label-td' colspan='2'>
                                             <label for='pname' class='form-label'>Name: </label>
                                         </td>
@@ -271,9 +271,9 @@
                                         <td class='label-td' colspan='2'>
                                             <input type='text' name='docname' class='input-text' placeholder='Doctor Name' value='".$doctor->docname."' required><br>
                                         </td>
-                                        
+
                                     </tr>
-                                    
+
                                     <tr>
                                         <td class='label-td' colspan='2'>
                                             <label for='pnic' class='form-label'>NIC: </label>
@@ -319,7 +319,7 @@
                                                 <img src='" . asset('/img/icons/eye.svg') . "' class='toggle-password' onclick='togglePassword()'>
                                             </div>
                                         </td>
-                                    </tr>                                    
+                                    </tr>
                                     <tr>
                                         <td>
                                             "  @endphp
@@ -332,15 +332,15 @@
                                             @endif
                                             @php echo "
                                         </td>
-                                    </tr>    
+                                    </tr>
                                     <tr>
                                         <td colspan='2'>
                                             <input type='reset' value='Reset'  class='login-btn btn-primary-soft btn' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <input type='submit' value='Save'  class='login-btn btn-primary btn'>
                                         </td>
-                        
+
                                     </tr>
-                                
+
                                     </form>
                                     </tr>
                                 </table>
@@ -376,13 +376,13 @@
             eDoc Web App<br>
         </div>
             <div style="display: flex;justify-content: center;">
-            <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">                        
+            <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                 <tr>
                     <td>
                         <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">View Details.</p><br><br>
                     </td>
-                </tr>                            
-                <tr>                                
+                </tr>
+                <tr>
                     <td class="label-td" colspan="2">
                         <label for="name" class="form-label">Name: </label>
                     </td>
@@ -391,7 +391,7 @@
                     <td class="label-td" colspan="2">
                         ${detail.docname} <br><br>
                     </td>
-                    
+
                 </tr>
                 <tr>
                     <td class="label-td" colspan="2">
@@ -426,7 +426,7 @@
                 <tr>
                     <td class="label-td" colspan="2">
                         <label for="spec" class="form-label">Specialties: </label>
-                        
+
                     </td>
                 </tr>
                 <tr>
@@ -437,8 +437,8 @@
                 <tr>
                     <td colspan="2">
                         <a href="{{route('doctors_setting',['id'=>$user->id])}}"><input type="button" value="OK" class="login-btn btn-primary-soft btn" ></a>
-                    </td>                
-                </tr>                           
+                    </td>
+                </tr>
             </table>
         </div>`;
         document.getElementById('popup1').style.display = "flex";
@@ -461,7 +461,7 @@
                 <button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;">
                     <font class="tn-in-text">&nbsp;&nbsp;No&nbsp;&nbsp;</font></button></a>
             </div>`;
-            
+
             document.getElementById('popup1').style.display = "flex";
         }
         function togglePassword(){

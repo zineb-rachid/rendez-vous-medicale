@@ -189,11 +189,7 @@
                                                         <img src="{{ asset('img/notfound.svg') }}" width="25%">
                                                         <br>
                                                         <p class="heading-main12" style="font-size:20px;color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
-                                                        <a class="non-style-link" href="{{ route('patient_doctors', ['id' => $user->id]) }}">
-                                                            <button class="login-btn btn-primary-soft btn" style="display: flex;justify-content: center;align-items: center;margin-left:20px;">
-                                                                &nbsp; Show all Doctors &nbsp;
-                                                            </button>
-                                                        </a>
+                                                        
                                                     </center>
                                                     <br><br><br><br>
                                                 </td>
@@ -248,11 +244,11 @@
         {
             document.getElementById('popup-content').innerHTML = `
                         <div class="content">
-                            You want to view All sessions by <br>${doctor.docname}                            
+                            You want to view All sessions by <br>${doctor.docname}
                         </div>
                         <form  method="post" action="{{route('patient-schedule_search',['id'=>$user->id])}}" style="display: flex">
                             @csrf
-                            <input type="hidden" name="search" value="${doctor.docname}">                                
+                            <input type="hidden" name="search" value="${doctor.docname}">
                             <div style="display: flex;justify-content:center;margin-left:45%;margin-top:6%;;margin-bottom:6%;">
                             <input type="submit"  value="Yes" class="btn-primary btn" >
                             </div>

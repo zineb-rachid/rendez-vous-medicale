@@ -61,9 +61,15 @@ Route::post('/doctors/appointment/{id}', [doctorController::class, 'appointment'
 
 Route::get('/doctors/dropAppointment/{id}', [doctorController::class, 'dropApp'])->name('doctors_appointment_delete');
 
-Route::get('/doctors/schedule/{id}', [doctorController::class, 'index'])->name('doctors_schedule');
+Route::get('/doctors/schedule/{id}', [doctorController::class, 'schedule'])->name('doctors_schedule');
 
-Route::get('/doctors/patient/{id}', [doctorController::class, 'index'])->name('doctors_patient');
+Route::post('/doctors/schedule/{id}/',[doctorController::class,'schedule'])->name('doctors_schedule_search');
+
+Route::get('/doctors/schedule/delete/{scheduleid}',[doctorController::class,'dropSchedule'])->name('doctors_schedule_delete');
+
+Route::get('/doctors/patient/{id}', [doctorController::class, 'patient'])->name('doctors_patient');
+
+Route::post('/doctors/patient/{id}', [doctorController::class, 'patient'])->name('doctors_patient_search');
 
 Route::get('/doctors/setting/{id}', [doctorController::class, 'setting'])->name('doctors_setting');
 

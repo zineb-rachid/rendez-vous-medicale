@@ -2,17 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <title>Sessions</title>
     <style>
-        .popup {
-            animation: transitionIn-Y-bottom 0.5s;
-        }
-        .sub-table {
+        .popup, .sub-table {
             animation: transitionIn-Y-bottom 0.5s;
         }
         .overlay {
@@ -42,7 +39,7 @@
             right: 10px;
             font-size: 20px;
         }
-        
+
     </style>
 </head>
 <body>
@@ -160,7 +157,7 @@
                 <tr>
                     <td colspan="4">
                         <center>
-                            <div class="abc ">
+                            <div class="abc">
                                 <table width="100%" class="sub-table scrolldown" border="0" style="padding: 50px; border:none;">
                                     <tbody>
                                         @forelse ($schedule as $sc)
@@ -179,7 +176,7 @@
                                                                 {{ $sc->scheduledate }}<br>Starts: <b>@ {{ substr($sc->scheduletime, 0, 5) }}</b> (8h)
                                                             </div>
                                                             <br>
-                                                            <a href="#" onclick="book({{ json_encode($sc) }},{{$sc->appointment->pluck('apptime')}})">
+                                                            <a onclick="book({{ json_encode($sc) }}, {{$sc->appointment->pluck('apptime')}})">
                                                                 <button class="login-btn btn-primary-soft btn" style="padding-top:11px; padding-bottom:11px; width:100%;">
                                                                     <font class="tn-in-text">Book Now</font>
                                                                 </button>
@@ -196,15 +193,11 @@
                                                         <img src="{{ asset('img/notfound.png') }}" width="25%">
                                                         <br>
                                                         <p class="heading-main12" style="margin-left: 45px; font-size:20px; color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
-                                                        <a class="non-style-link" href="{{ route('patient-schedule', ['id' => $user->id]) }}">
-                                                            <button class="login-btn btn-primary-soft btn" style="display: flex; justify-content: center; align-items: center; margin-left:20px;">
-                                                                &nbsp; Show all Sessions &nbsp;
-                                                            </button>
-                                                        </a>
+                                                        
                                                     </center>
                                                     <br><br><br><br>
                                                 </td>
-                                            </tr>                                            
+                                            </tr>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -253,7 +246,7 @@
                 <div class="time-slots-container">
                     ${availableSlots}
                 </div><br/><br/>
-                <a id="myRoute"  onClick="booked()">
+                <a id="myRoute" onClick="booked()">
                     <button class="book-button btn-primary-soft btn">
                         <font class="tn-in-text">Book</font>
                     </button>
@@ -278,10 +271,9 @@
         }
 
         function booked() {
-            alert('Booked Successfuly! ')
-            document.getElementById('popup1').style.display = "flex";
+            alert('Booked Successfully!');
+            document.getElementById('popup1').style.display = "none";
         }
     </script>
-    
 </body>
 </html>

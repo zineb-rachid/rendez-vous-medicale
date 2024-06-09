@@ -75,16 +75,23 @@ class PatientController extends Controller
         $search=request('search');
 
         if ($search) {
-            $appointments = appointment::where('appdate', 'LIKE', "%{$search}%")
-                ->orWhere('appdate',  $search)
+            $appointments = appointment::where('pid',$patient->pid)
+                ->where('appdate', 'LIKE', "%{$search}%")
+                ->Where('appdate',  $search)
                 ->get();
-        } 
-        else 
+        }
+        else
         {
-            $appointments = appointment::orderBy('appdate', 'desc')->get();
+            $appointments = appointment::orderBy('appdate', 'desc')
+            ->where('pid',$patient->pid)
+            ->get();
         }
         return view('patient.appointment', compact('username', 'user', 'useremail', 'today','appointments'));
     }
+
+
+
+
     public function deleteAppointment($id)
     {
         if($id){
@@ -93,8 +100,11 @@ class PatientController extends Controller
         }
         else 'no appointment ';
         return redirect()->back();
-    
     }
+
+
+
+
     public function settings($id)
     {
         $today = now()->format('Y-m-d');
@@ -106,13 +116,16 @@ class PatientController extends Controller
 
         return view('patient.settings',compact('today' ,'user' ,'useremail' , 'username','patient'));
     }
+
+
+
     public function update($pid)
     {
         $patient = Patient::find($pid);
+        $patientemail=$patient->pemail;
+        $user=user::where("email",$patientemail)->first();
 
-        if (!$patient) {
-            return redirect()->back()->withErrors(['error' => 'Patient not found.']);
-        }
+        $user->email=request('pemail');
 
         $patient->pname = request('pname');
         $patient->pemail = request('pemail');
@@ -122,19 +135,21 @@ class PatientController extends Controller
 
         $pass = request('ppassword');
         $cpass = request('cpassword');
-        
-        if ($pass === $cpass) 
+
+        if ($pass === $cpass)
         {
             $patient->ppassword = Hash::make($pass);
-        } 
-        else 
+            $user->password = Hash::make($pass);
+        }
+        else
         {
             return redirect()->back()->withErrors(['error' => 'Password confirmation error! Reconfirm password.']);
         }
 
         $patient->save();
-        
-        return redirect()->back()->with('success', 'Patient details updated successfully.');
+        $user->save();
+
+        return redirect()->route('patient-settings',['id'=>$user->id]);
     }
 
 
@@ -148,6 +163,8 @@ class PatientController extends Controller
         $patient->delete();
         return redirect()->route('logout');
     }
+
+    
     public function schedule($id)
     {
         $today = now()->format('Y-m-d');
@@ -165,8 +182,8 @@ class PatientController extends Controller
                 $schedule = schedule::where('docid', $doctor->docid)
                                     ->orWhere('scheduledate', 'LIKE', "%{$search}%")
                                     ->get();
-            } 
-            elseif (strtotime($search) !== false) 
+            }
+            elseif (strtotime($search) !== false)
             {
                 $schedule = schedule::where('scheduledate', 'LIKE', "%{$search}%")->get();
             }
@@ -178,7 +195,7 @@ class PatientController extends Controller
         {
             $schedule = schedule::all();
         }
-        
+
         $countS = $schedule->count();
 
         return view('patient.schedule', compact('today', 'user', 'username', 'useremail', 'schedule', 'countS'));
@@ -192,7 +209,7 @@ class PatientController extends Controller
         $Fschedule=schedule::find($schedule);
         $scheduledate=$Fschedule->scheduledate;
         if (is_null($maxAppNum)) {
-            $maxAppNum = 0; 
+            $maxAppNum = 0;
         }
         $appointment=new appointment();
         $appointment->pid=$patient->pid;

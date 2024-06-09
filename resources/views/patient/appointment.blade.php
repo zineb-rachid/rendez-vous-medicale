@@ -40,6 +40,7 @@
             right: 10px;
             font-size: 20px;
         }
+
     </style>
 </head>
 <body>
@@ -116,7 +117,7 @@
                         </a>
                     </td>
                     <td>
-                        <p style="font-size:23px;font-weight:600;padding-left: 12px;">My bookings history</p> 
+                        <p style="font-size:23px;font-weight:600;padding-left: 12px;">My bookings history</p>
                     </td>
                     <td width="15%">
                         <p style="font-size: 14px;color: rgb(119, 119, 119);padding: 0;margin: 0;text-align: right;">
@@ -143,20 +144,20 @@
                             <table class="filter-container" border="0">
                                 <tr>
                                    <td width="10%">
-                                   </td> 
+                                   </td>
                                     <td width="5%" style="text-align: center;">
                                     Date:
                                     </td>
                                     <td width="30%">
                                         <form action="{{route('patient-appointments_search',['id'=>$user->id])}}" method="post" class="header-search">
-                                            @csrf                                          
+                                            @csrf
                                             <input type="date" name="search" id="date" class="input-text filter-container-items" style="margin: 0;width: 95%;">
-                                    </td>                                
+                                    </td>
                                     <td width="12%">
                                             <input type="submit" name="filter" value=" Filter" class="btn-primary-soft btn button-icon btn-filter" style="padding: 15px; margin: 0;width:100%">
                                         </form>
                                     </td>
-                                
+
                                 </tr>
                             </table>
                         </center>
@@ -166,16 +167,16 @@
                     <td colspan="4">
                         <center>
                             <div class="abc scroll" >
-                                <table width="93%" class="sub-table scrolldown" border="0" style="border:none;">                        
-                                    <tbody> 
+                                <table width="93%" class="sub-table scrolldown" border="0" style="border:none;">
+                                    <tbody>
                                         <tr>
                                             <td style="width: 25%;">
-                                                @forelse($appointments as $app)                                                
-                                                <div class="dashboard-items search-items" > 
+                                                @forelse($appointments as $app)
+                                                <div class="dashboard-items search-items" >
                                                     <div style="width:100%;">
                                                         <div class="h3-search">
                                                             Booking Date: {{$app->appdate}} <br>
-                                                            Reference Number: OC-000-{{$app->appid}}
+                                                            Bokking Time: {{$app->apptime }}
                                                         </div>
                                                         <div class="h1-search">
                                                             {{$app->schedule->title}} <br>
@@ -193,7 +194,7 @@
                                                         <button class="login-btn btn-primary-soft btn" style="padding-top:11px;padding-bottom:11px;width:100%" onclick="showPopup({{ $app }})">
                                                             <font class="tn-in-text">Cancel Booking</font>
                                                         </button>
-                                                    </div>        
+                                                    </div>
                                                 </div>
                                                 @empty
                                                 <tr>
@@ -203,11 +204,7 @@
                                                         <img src="{{ asset('img/notfound.png') }}" width="25%">
                                                         <br>
                                                         <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
-                                                        <a class="non-style-link" href="{{route('patient-appointments',['id'=>$user->id])}}">
-                                                            <button class="login-btn btn-primary-soft btn" style="display: flex;justify-content: center;align-items: center;margin-left:20px;">
-                                                                &nbsp; Show all Appointments &nbsp;
-                                                            </button>
-                                                        </a>
+                                                        
                                                         </center>
                                                         <br><br><br><br>
                                                     </td>
@@ -219,13 +216,13 @@
                                 </table>
                             </div>
                         </center>
-                    </td> 
+                    </td>
                 </tr>
             </table>
         </div>
     </div>
 
-    
+
     <div id="popup1" class="overlay">
         <div class="popup">
             <a class="close" onclick="hidePopup()">&times;</a>
@@ -233,14 +230,14 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         function showPopup(app) {
             const appDetails = {
                 sname: app.schedule.title,
                 dname: app.schedule.doctor.docname
             };
-    
+
             document.getElementById('popup-content').innerHTML = `
                 <h2>Are you sure?</h2>
                 <div class="content">
@@ -260,26 +257,20 @@
                         </button>
                     </a>
                 </div>`;
-    
+
             document.getElementById('popup1').style.display = "flex";
-    
-            
+
+
             document.getElementById('cancelLink').href = "{{ route('patient-appointments-delete', ['id' => ':id']) }}".replace(':id', app.appid);
         }
-    
+
         function hidePopup() {
             document.getElementById('popup1').style.display = 'none';
         }
-    
+
         if (!app || app.length === 0) {
             document.getElementById('cancelLink').style.display = 'none';
         }
     </script>
-    
-    
-
-    
-    
-
 </body>
 </html>

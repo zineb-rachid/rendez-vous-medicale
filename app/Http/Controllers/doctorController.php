@@ -55,7 +55,7 @@ class doctorController extends Controller
             $scheduleId=$doctor->schedule()->pluck('scheduleid');
             $appointment=appointment::whereIn('scheduleid',$scheduleId)->get();
         }
-        
+
         $appcount=$appointment->count();
         return view('doctor.appointment',compact('user','docname','useremail','today','appointment','appcount'));
     }
@@ -122,5 +122,90 @@ class doctorController extends Controller
             return redirect()->back()->withErrors(['error' => 'Password Confirmation Error! Reconfirm Password.']);
         }
     }
+
+
+
+    public function schedule($id)
+    {
+        $today=now()->format('Y-m-d');
+        $user=user::find($id);
+        $useremail=$user->email;
+        $doctor= doctor::where('docemail',$useremail)->first();
+        $docid=$doctor->docid;
+        $docname=$doctor->docname;
+        $docemail=$doctor->docemail;
+        $search=request('search');
+        if($search)
+        {
+            $schedule=schedule::where('docid',$docid)->where('scheduledate',$search)->get();
+        }
+        else
+        {
+            $schedule=schedule::where('docid',$docid)->get();
+        }
+        $scheduleCount=$schedule->count();
+        return view('doctor.schedule',compact('today','doctor','schedule','docname','docemail','user','scheduleCount'));
+    }
+
+
+
+    public function dropSchedule($scheduleid)
+    {
+        $schedule=schedule::find($scheduleid);
+        $appointment=appointment::where('scheduleid',$scheduleid);
+        $appointment->delete();
+        $schedule->delete();
+        return redirect()->back();
+    }
+
+
+    public function patient($id)
+{
+    $today = now()->format('Y-m-d');
+    $user = User::find($id);
+    $useremail = $user->email;
+    $doctor = Doctor::where('docemail', $useremail)->first();
+    $docname = $doctor->docname;
+    $docemail = $doctor->docemail;
+    $search = request('query');
+    $showonly = request('showonly');
+    $current = 'My patients Only';
+
+    $scheduleIds = $doctor->schedule()->pluck('scheduleid');
+
+    $appointments = Appointment::whereIn('scheduleid', $scheduleIds)->get();
+
+    if ($search) {
+        $patients = Patient::where('pname', 'like', "%{$search}%")
+            ->orWhere('pemail', 'like', "%{$search}%")
+            ->get();
+    } else {
+        if ($showonly)
+        {
+            if ($showonly == 'all')
+            {
+                $patients = Patient::all();
+                $current='All Patients';
+            }
+            else
+            {
+                $patients = $appointments->map(function ($appointment) {
+                    return $appointment->patient;
+                });
+            }
+        }
+        else
+        {
+            $patients = $appointments->map(function ($appointment) {
+                return $appointment->patient;
+            });
+        }
+    }
+
+    $patientsCount = $patients->count();
+
+    return view('doctor.patient', compact('today', 'user', 'docname', 'docemail', 'patients', 'patientsCount', 'current'));
+}
+
 
 }
