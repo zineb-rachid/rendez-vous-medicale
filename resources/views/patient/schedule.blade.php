@@ -193,7 +193,11 @@
                                                         <img src="{{ asset('img/notfound.png') }}" width="25%">
                                                         <br>
                                                         <p class="heading-main12" style="margin-left: 45px; font-size:20px; color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
-                                                        
+                                                        <a class="non-style-link" href="{{ route('patient-schedule', ['id' => $user->id]) }}">
+                                                            <button class="login-btn btn-primary-soft btn" style="display: flex; justify-content: center; align-items: center; margin-left:20px;">
+                                                                &nbsp; Show all Sessions &nbsp;
+                                                            </button>
+                                                        </a>
                                                     </center>
                                                     <br><br><br><br>
                                                 </td>

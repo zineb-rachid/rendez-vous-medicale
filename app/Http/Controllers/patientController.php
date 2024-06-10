@@ -157,14 +157,16 @@ class PatientController extends Controller
     {
         $user = User::where('email', 'LIKE' ,"%{$email}")->first();
         $patient=patient::where('pemail',$email)->first();
-        $app=DB::table('appointment')->where('pid',$patient->pid);
-        $app->delete();
+        $appointments=DB::table('appointment')->where('pid',$patient->pid)->get();
+        foreach ($appointments as $appointment) {
+            $appointment->delete();
+        }
         $user->delete();
         $patient->delete();
         return redirect()->route('logout');
     }
 
-    
+
     public function schedule($id)
     {
         $today = now()->format('Y-m-d');

@@ -78,13 +78,31 @@ class doctorController extends Controller
     public function deleteAccount($email)
     {
         $user = User::where('email', 'LIKE' ,"%{$email}")->first();
-        $doctor = doctor::where('docemail',$email)->first();
-        $schedule=DB::table('schedule')->where('docid',$doctor->docid);
-        $schedule->delete();
-        $user->delete();
-        $doctor->delete();
-        return redirect()->route('logout') ;
+        $doctor = Doctor::where('docemail', $email)->first();
+
+        if ($doctor) {
+            $scheduleIds = $doctor->schedule()->pluck('scheduleid');
+            $schedules = Schedule::whereIn('scheduleid', $scheduleIds)->get();
+            $appointments = Appointment::whereIn('scheduleid', $scheduleIds)->get();
+
+            foreach ($appointments as $appointment) {
+                $appointment->delete();
+            }
+
+            foreach ($schedules as $schedule) {
+                $schedule->delete();
+            }
+
+            $doctor->delete();
+        }
+
+        if ($user) {
+            $user->delete();
+        }
+
+        return redirect()->route('logout');
     }
+
     public function accountUpdate($docid)
     {
         $doctor = Doctor::find($docid);
@@ -152,7 +170,10 @@ class doctorController extends Controller
     public function dropSchedule($scheduleid)
     {
         $schedule=schedule::find($scheduleid);
-        $appointment=appointment::where('scheduleid',$scheduleid);
+        $appointments=appointment::where('scheduleid',$scheduleid)->get();
+        foreach ($appointments as $appointment) {
+            $appointment->delete();
+        }
         $appointment->delete();
         $schedule->delete();
         return redirect()->back();
@@ -184,24 +205,24 @@ class doctorController extends Controller
         {
             if ($showonly == 'all')
             {
-                $patients = Patient::all();
+                $patient = Patient::all();
                 $current='All Patients';
             }
             else
             {
-                $patients = $appointments->map(function ($appointment) {
+                $patient = $appointments->map(function ($appointment) {
                     return $appointment->patient;
                 });
             }
         }
         else
         {
-            $patients = $appointments->map(function ($appointment) {
+            $patient = $appointments->map(function ($appointment) {
                 return $appointment->patient;
             });
         }
     }
-
+    $patients = $patient->unique('pemail')->values() ;
     $patientsCount = $patients->count();
 
     return view('doctor.patient', compact('today', 'user', 'docname', 'docemail', 'patients', 'patientsCount', 'current'));
