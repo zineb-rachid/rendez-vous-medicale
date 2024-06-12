@@ -216,3 +216,6 @@ public function store (Request $request){
         return redirect()->route('admin_appointments')->with('success', 'Appointment deleted successfully');
     }
 }
+ public function schedule(){
+         return view ("admin.schedule");
+    }
