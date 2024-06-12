@@ -105,7 +105,7 @@
                         </a>
                     </td>
                     <td>
-                        <form action="{{ route('admin_doctors_search', ) }}" method="post" class="header-search">
+                        <form action="{{ route('admin_doctors_search' ) }}" method="GET" class="header-search">
                             @csrf
                             <input type="search" name="search" class="input-text header-searchbar" placeholder="Search Doctor name or Email" list="doctors">
                             <datalist id="doctors" name='search'>
@@ -432,7 +432,7 @@ if(isset($action)){
                                        <input type='text' name='docnic' class='input-text' placeholder='NIC Number'  required><br>
                                    </td>
                                </tr>
-                              
+
                                  <tr>
                                    <td class='label-td' colspan='2'>
                                        <label for='ptel' class='form-label'>Telephone: </label>

@@ -105,3 +105,5 @@ Route::get('/admin/appointment', [adminController::class, 'appointment'])->name(
 Route::GET('/admin/appointment/filter', [adminController::class, 'filterAppointments'])->name('appointments.filter');
 
 Route::get('/admin/appointment/delete/{id}', [adminController::class, 'deleteAppointment'])->name('appointments.delete');
+
+Route::get('/admin/schedule', [adminController::class, 'schedule'])->name('admin_schedule');

@@ -89,7 +89,7 @@
                 </tr>
                 <tr class="menu-row">
                     <td class="menu-btn menu-icon-appoinment">
-                        <a href="{{ route('admin_appointment') }}" class="non-style-link-menu"><div><p class="menu-text">Appointment</p></div></a>
+                        <a href="{{ route('admin_appointments') }}" class="non-style-link-menu"><div><p class="menu-text">Appointment</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">
@@ -110,7 +110,7 @@
                         </a>
                     </td>
                     <td>
-                        <form action="{{ route('admin_patients_search') }}" method="post" class="header-search">
+                        <form action="{{ route('admin_patients_search') }}" method="get" class="header-search">
                             @csrf
                             <input type="search" name="search" class="input-text header-searchbar" placeholder="Search Patient name or Email" list="patient">&nbsp;&nbsp;
                             <datalist id="patient">
@@ -188,7 +188,7 @@
                                                             <button class="btn-primary-soft btn button-icon btn-view" style="padding-top: 12px;padding-bottom: 12px; " onclick="showPopup({{ json_encode($patient) }})">
                                                                 <font class="tn-in-text">View</font>
                                                             </button>
-                                                       
+
                                                     </td>
                                                 </tr>
                                             @endforeach
