@@ -90,7 +90,7 @@ Route::get('/admin/doctors/{doctor}', [adminController::class, 'delete'])->name(
 
 Route::post('/admin/storedoctor', [adminController::class, 'store'])->name('doctors.store');
 
-Route::get('/admin/schedule', [adminController::class, 'index'])->name('admin_schedule');
+Route::get('/admin/schedule', [adminController::class, 'schedule'])->name('admin_schedule');
 
 Route::get('/admin/appointments',[adminController::class,'index'])->name('admin_appointments');
 

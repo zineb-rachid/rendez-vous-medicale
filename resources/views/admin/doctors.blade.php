@@ -68,13 +68,13 @@
                     </td>
                 </tr>
                 <tr class="menu-row">
-                    <td class="menu-btn menu-icon-dashbord menu-active menu-icon-dashbord-active">
-                        <a href="{{ route('admin_index') }}" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Dashboard</p></div></a>
+                    <td class="menu-btn menu-icon-dashbord">
+                        <a href="{{ route('admin_index') }}" class="non-style-link-menu "><div><p class="menu-text">Dashboard</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">
-                    <td class="menu-btn menu-icon-doctor">
-                        <a href="{{ route('admin_doctors') }}" class="non-style-link-menu"><div><p class="menu-text">Doctors</p></div></a>
+                    <td class="menu-btn menu-icon-doctor menu-active menu-icon-doctor-active">
+                        <a href="{{ route('admin_doctors') }}" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Doctors</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">

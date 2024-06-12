@@ -44,8 +44,8 @@
                     </td>
                 </tr>
                 <tr class="menu-row">
-                    <td class="menu-btn menu-icon-dashbord menu-active menu-icon-dashbord-active">
-                        <a href="{{ route('admin_index') }}" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Dashboard</p></div></a>
+                    <td class="menu-btn menu-icon-dashbord">
+                        <a href="{{ route('admin_index') }}" class="non-style-link-menu"><div><p class="menu-text">Dashboard</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">
@@ -54,8 +54,8 @@
                     </td>
                 </tr>
                 <tr class="menu-row">
-                    <td class="menu-btn menu-icon-schedule">
-                        <a href="{{ route('admin_schedule') }}" class="non-style-link-menu"><div><p class="menu-text">Schedule</p></div></a>
+                    <td class="menu-btn menu-icon-schedule menu-active menu-icon-schedule-active">
+                        <a href="{{ route('admin_schedule') }}" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Schedule</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">
@@ -74,7 +74,7 @@
             <table border="0" width="100%" style=" border-spacing: 0;margin:0;padding:0;margin-top:25px; ">
                 <tr >
                     <td width="13%" >
-                    <a href="schedule.php" ><button  class="login-btn btn-primary-soft btn btn-icon-back"  style="padding-top:11px;padding-bottom:11px;margin-left:20px;width:125px"><font class="tn-in-text">Back</font></button></a>
+                    <a href="{{route('admin_schedule')}}" ><button  class="login-btn btn-primary-soft btn btn-icon-back"  style="padding-top:11px;padding-bottom:11px;margin-left:20px;width:125px"><font class="tn-in-text">Back</font></button></a>
                     </td>
                     <td>
                         <p style="font-size: 23px;padding-left:12px;font-weight: 600;">Shedule Manager</p>
@@ -85,7 +85,7 @@
                             Today's Date
                         </p>
                         <p class="heading-sub12" style="padding: 0;margin: 0;">
-
+                            {{$today}}
                         </p>
                     </td>
                     <td width="10%">

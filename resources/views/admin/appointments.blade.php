@@ -19,18 +19,65 @@
 </head>
 <body>
     <div class="container">
-        <div class="menu">
-            <table class="menu-container" border="0">
-                <!-- Menu code omitted for brevity -->
-            </table>
-        </div>
+        <div class="container">
+            <div class="menu">
+                <table class="menu-container" border="0">
+                    <tr>
+                        <td style="padding:10px" colspan="2">
+                            <table border="0" class="profile-container">
+                                <tr>
+                                    <td width="30%" style="padding-left:20px">
+                                        <img src="{{ asset('img/user.png') }}" alt="" width="100%" style="border-radius:50%">
+                                    </td>
+                                    <td style="padding:0;margin:0;">
+                                        <p class="profile-title">Administrator</p>
+                                        <p class="profile-subtitle">admin@edoc.com</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <a href="{{ route('logout') }}"><input type="button" value="Log out" class="logout-btn btn-primary-soft btn"></a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="menu-row">
+                        <td class="menu-btn menu-icon-dashbord">
+                            <a href="{{ route('admin_index') }}" class="non-style-link-menu"><div>
+                                <p class="menu-text">Dashboard</p></div></a>
+                        </td>
+                    </tr>
+                    <tr class="menu-row">
+                        <td class="menu-btn menu-icon-doctor">
+                            <a href="{{ route('admin_doctors') }}" class="non-style-link-menu"><div><p class="menu-text">Doctors</p></div></a>
+                        </td>
+                    </tr>
+                    <tr class="menu-row">
+                        <td class="menu-btn menu-icon-schedule">
+                            <a href="{{ route('admin_schedule') }}" class="non-style-link-menu"><div><p class="menu-text">Schedule</p></div></a>
+                        </td>
+                    </tr>
+                    <tr class="menu-row">
+                        <td class="menu-btn menu-icon-appoinment  menu-active menu-icon-appoinment-active">
+                            <a href="{{ route('admin_appointments') }}" class="non-style-link-menu non-style-link-menu-active">
+                                <div><p class="menu-text">Appointment</p></div></a>
+                        </td>
+                    </tr>
+                    <tr class="menu-row">
+                        <td class="menu-btn menu-icon-patient">
+                            <a href="{{ route('admin_patients') }}" class="non-style-link-menu"><div><p class="menu-text">Patients</p></div></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         <div class="dash-body">
             <table border="0" width="100%" style="border-spacing: 0; margin: 0; padding: 0; margin-top: 25px;">
-                <!-- Header code omitted for brevity -->
+
                 <tr>
                     <td colspan="4" style="padding-top: 10px; width: 100%;">
                         <p class="heading-main12" style="margin-left: 45px; font-size: 18px; color: rgb(49, 49, 49)">
-                            All Appointments ({{ $apps->count() }})
+                            All Appointments ({{ $appointmentsCount }})
                         </p>
                     </td>
                 </tr>
@@ -69,26 +116,7 @@
                         </center>
                     </td>
                 </tr>
-                @if($filttredappointment->isEmpty())
-                    <tr>
-                        <td colspan="7">
-                            <br><br><br><br>
-                            <center>
-                                <img src="{{ asset('img/notfound.png') }}" width="25%">
-                                <br>
-                                <p class="heading-main12" style="margin-left: 45px; font-size: 20px; color: rgb(49, 49, 49)">
-                                    We couldn't find anything related to your keywords!
-                                </p>
-                                <a class="non-style-link" href="{{ route('admin_appointments') }}">
-                                    <button class="login-btn btn-primary-soft btn" style="display: flex; justify-content: center; align-items: center; margin-left: 20px;">
-                                        &nbsp; Show all Appointments &nbsp;
-                                    </button>
-                                </a>
-                            </center>
-                            <br><br><br><br>
-                        </td>
-                    </tr>
-                @else
+
                 <td colspan="4">
                     <center>
                         <div class="abc scroll">
@@ -105,32 +133,50 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($filttredappointment as $Fapp)
-                                        <tr>
-                                            <td>{{ $Fapp->patient->pname }}</td>
-                                            <td style="text-align: center; font-size: 23px; font-weight: 500; color: var(--btnnicetext);">{{ $Fapp->appnum }}</td>
-                                            <td>{{ $Fapp->schedule->doctor->docname }}</td>
-                                            <td>{{ Str::limit($Fapp->schedule->title, 15) }}</td>
-                                            <td style="text-align: center; font-size: 12px;">{{ $Fapp->schedule->scheduledate }} <br> {{ $Fapp->schedule->scheduletime }}</td>
-                                            <td style="text-align: center;">{{ $Fapp->appdate }}</td>
-                                            <td>
-                                                <div style="display: flex; justify-content: center;">
-                                                    &nbsp;&nbsp;&nbsp;
-                                                    <a href="{{ route('appointments.delete', ['id' => $Fapp->appid]) }}" class="non-style-link">
-                                                        <button class="btn-primary-soft btn button-icon btn-delete">
-                                                            <font class="tn-in-text">Cancel</font>
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                    @forelse($filteredAppointments as $appointment)
+                                    <tr>
+                                        <td>{{ $appointment->patient->pname }}</td>
+                                        <td style="text-align: center; font-size: 23px; font-weight: 500; color: var(--btnnicetext);">{{ $appointment->appnum }}</td>
+                                        <td>{{ $appointment->schedule->doctor->docname }}</td>
+                                        <td>{{ Str::limit($appointment->schedule->title, 15) }}</td>
+                                        <td style="text-align: center; font-size: 12px;">{{ $appointment->schedule->scheduledate }} <br> {{ $appointment->schedule->scheduletime }}</td>
+                                        <td style="text-align: center;">{{ $appointment->appdate }}</td>
+                                        <td>
+                                            <div style="display: flex; justify-content: center;">
+                                                &nbsp;&nbsp;&nbsp;
+                                                <a href="{{ route('appointments.delete', ['id' => $appointment->appid]) }}" class="non-style-link">
+                                                    <button class="btn-primary-soft btn button-icon btn-delete">
+                                                        <font class="tn-in-text">Cancel</font>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">
+                                            <br><br><br><br>
+                                            <center>
+                                                <img src="{{ asset('img/notfound.png') }}" width="25%">
+                                                <br>
+                                                <p class="heading-main12" style="margin-left: 45px; font-size: 20px; color: rgb(49, 49, 49)">
+                                                    We couldn't find anything related to your keywords!
+                                                </p>
+                                                <a class="non-style-link" href="{{ route('admin_appointments') }}">
+                                                    <button class="login-btn btn-primary-soft btn" style="display: flex; justify-content: center; align-items: center; margin-left: 20px;">
+                                                        &nbsp; Show all Appointments &nbsp;
+                                                    </button>
+                                                </a>
+                                            </center>
+                                            <br><br><br><br>
+                                        </td>
+                                    </tr>
+                                @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </center>
                 </td>
-                @endif
             </table>
         </div>
     </div>

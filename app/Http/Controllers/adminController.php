@@ -160,50 +160,46 @@ public function store (Request $request){
     }
     public function appointment(){
         $today = now()->format('Y-m-d');
-        $doctors=Doctor::all();
-        $appointments = appointment::orderBy('appid', 'desc')->get();
+        $doctors = Doctor::all();
         $appointments = Appointment::with(['patient', 'schedule'])->orderBy('appid', 'desc')->get();
-        return view("admin.appointments", compact(["appointments", "today","doctors"]));
+
+        return view("admin.appointments", compact("appointments", "today", "doctors"));
     }
+
     public function filterAppointments(Request $request)
     {
-
-        $request->validate(
-            [
-                'docname' => 'required',
-                'search' => 'required',
-            ]
-        );
-
+        $request->validate([
+            'docname' => 'required',
+            'search' => 'required',
+        ]);
 
         $doctors = Doctor::all();
         $apps = Appointment::all();
         $filtereddoctor = $request->input("docname");
         $search = $request->input('search');
 
-
         $doctor = Doctor::where('docname', '=', $filtereddoctor)->first();
 
-
-        $filttredappointment = collect();
+        $filteredAppointments = collect();
 
         if ($doctor) {
-
             $schedules = Schedule::where('scheduledate', 'LIKE', "%{$search}%")
                                 ->orWhere('scheduledate', $search)
                                 ->where('docid',"=",$doctor->docid)
                                 ->pluck('scheduleid');
 
-            $filttredappointment = Appointment::whereIn('scheduleid', $schedules)->get();
+            $filteredAppointments = Appointment::whereIn('scheduleid', $schedules)->get();
         }
 
+        $appointmentsCount = $apps->count(); // Adjusted variable name to appointmentsCount
 
         return view('admin.appointments', [
-            'filttredappointment' => $filttredappointment,
+            'filteredAppointments' => $filteredAppointments,
             'doctors' => $doctors,
-            'apps' => $apps
+            'appointmentsCount' => $appointmentsCount // Corrected variable name here
         ]);
     }
+
 
 
 
@@ -217,6 +213,7 @@ public function store (Request $request){
         return redirect()->route('admin_appointments')->with('success', 'Appointment deleted successfully');
     }
     public function schedule(){
-         return view ("admin.schedule");
+        $today=now()->format('Y-m-d');
+         return view ("admin.schedule",compact('today'));
     }
 }
