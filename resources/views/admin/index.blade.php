@@ -187,7 +187,7 @@
                                                                 <center>
                                                                     <img src="{{ asset('img/notfound.svg') }}" width="25%">
                                                                     <p class="heading-main12" style="margin-top: 20px;font-size: 20px;color: #ff5050;">Nothing to show here!</p>
-                                                                    <a class="non-style-link" href="{{ route('admin_appointment') }}"><button class="login-btn btn-primary-soft btn">Show all Appointments</button></a>
+                                                                    <a class="non-style-link" href="{{ route('admin_appointments') }}"><button class="login-btn btn-primary-soft btn">Show all Appointments</button></a>
                                                                 </center>
                                                                 <br><br><br><br>
                                                             </td>
