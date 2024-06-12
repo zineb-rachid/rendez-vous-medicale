@@ -173,9 +173,9 @@
                                                             <font class="tn-in-text">View</font>
                                                         </button>
                                                         &nbsp;&nbsp;&nbsp;
-                                                        <a href="{{ url('doctor/sessions', $doctor->docid) }}" class="non-style-link">
+                                                        <a href="{{ url('doctor/sessions', $doctor->docid) }}" class="non-style-link" >
                                                             <button class="btn-primary-soft btn button-icon btn-delete" style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
-                                                                <a href="{{ route('admin_doctors_delete', ['doctor' => $doctor]) }}">Remove</a>
+                                                                <a href="{{ route('admin_doctors_delete', ['doctor' => $doctor]) }}" class="non-style-link">Remove</a>
 
                                                             </button>
                                                         </a>
