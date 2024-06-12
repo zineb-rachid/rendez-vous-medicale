@@ -17,7 +17,7 @@ class adminController extends Controller
     public function index(){
         $today = now()->format('Y-m-d');
 
-        // Fetch data from the database
+
         $doctorsCount = DB::table('doctor')->get();
         $patients = DB::table('patients')->get();
         $appointments = DB::table('appointment')
@@ -84,37 +84,29 @@ class adminController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // Find the doctor record by ID
+
         $doctor = doctor::findOrFail($id);
 
 $specialitie=specialities::all();
-        // Update the doctor fields with the request input
+
         $doctor->docname = $request->input('docname');
         $doctor->docemail = $request->input('docemail');
         $doctor->docnic = $request->input('docnic');
         $doctor->doctel = $request->input('doctel');
-        //$doctor->specialities = $request->input('specialities');
-
-        // Save the updated doctor record
         $doctor->save();
-
-        // Redirect to the doctors index page with a success message
         return redirect()->route('admin_doctors');
 
     }
     public function delete(Doctor $doctor)
 {
-    // Fetch the schedule related to the doctor
+
     $schedule = Schedule::where("docid", $doctor->docid)->first();
 
     if ($schedule) {
-        // Fetch appointments related to the schedule
         $appointment = Appointment::where("scheduleid", $schedule->scheduleid);
 
-        // Fetch the user related to the doctor
         $user = User::where("email", $doctor->docemail)->first();
 
-        // Delete related records
         $appointment->delete();
         if ($user) {
             $user->delete();
@@ -122,10 +114,8 @@ $specialitie=specialities::all();
         $schedule->delete();
     }
 
-    // Delete the doctor record
     $doctor->delete();
 
-    // Redirect to the admin doctors route
     return redirect()->route('admin_doctors');
 }
 
@@ -139,11 +129,6 @@ public function store (Request $request){
     $doctor->docpassword = $request->input('docpassword');
     $doctor->docspecialitie = 1;
     $doctor->save();
-       /* User::create([
-            'name' => $request->input('docname'),
-        'email' => $request->input('docemail'),
-        'role' => 'd',
-    ]);*/
     $user=new User();
     $user->name=$request->input('docname');
     $user->email=$request->input('docemail');
@@ -176,46 +161,62 @@ public function store (Request $request){
     public function appointment(){
         $today = now()->format('Y-m-d');
         $doctors=Doctor::all();
-       // $filteredAppointments=Doctor::all();
         $appointments = appointment::orderBy('appid', 'desc')->get();
-        //$patient=$appointments->patient->get();
-        //$schedule=$appointments->schedule()->get();
         $appointments = Appointment::with(['patient', 'schedule'])->orderBy('appid', 'desc')->get();
         return view("admin.appointments", compact(["appointments", "today","doctors"]));
     }
     public function filterAppointments(Request $request)
     {
-        $doctors=Doctor::all();
-        $search=request('search');
-        $doctor = doctor::where('docname','LIKE' ,$request->input("docname"))->first();
-        // Logic to filter appointments based on date and doctor
-        if($search)
-        {
-            $schedule=schedule::where('scheduledate', 'LIKE', "%{$search}%")
-            ->orWhere('scheduledate',  $search)->get();
-            $scheduleId=$doctor->schedule()->pluck('scheduleid');
-            $appointments=appointment::whereIn('scheduleid',$scheduleId)->get();
-        }
-        else
-        {
-            $scheduleId=$doctor->schedule()->pluck('scheduleid');
-            $appointments=appointment::whereIn('scheduleid',$scheduleId)->get();
+
+        $request->validate(
+            [
+                'docname' => 'required',
+                'search' => 'required',
+            ]
+        );
+
+
+        $doctors = Doctor::all();
+        $apps = Appointment::all();
+        $filtereddoctor = $request->input("docname");
+        $search = $request->input('search');
+
+
+        $doctor = Doctor::where('docname', '=', $filtereddoctor)->first();
+
+
+        $filttredappointment = collect();
+
+        if ($doctor) {
+
+            $schedules = Schedule::where('scheduledate', 'LIKE', "%{$search}%")
+                                ->orWhere('scheduledate', $search)
+                                ->where('docid',"=",$doctor->docid)
+                                ->pluck('scheduleid');
+
+            $filttredappointment = Appointment::whereIn('scheduleid', $schedules)->get();
         }
 
-        //return view('admin.appointments', ['appointments' => $appointments,'doctors' => $doctors]);
-        return $appointments;
+
+        return view('admin.appointments', [
+            'filttredappointment' => $filttredappointment,
+            'doctors' => $doctors,
+            'apps' => $apps
+        ]);
     }
+
+
 
 
 
     public function deleteAppointment($id)
     {
-        // Logic to delete a specific appointment
+
         $appointment = Appointment::findOrFail($id);
         $appointment->delete();
         return redirect()->route('admin_appointments')->with('success', 'Appointment deleted successfully');
     }
-}
- public function schedule(){
+    public function schedule(){
          return view ("admin.schedule");
     }
+}
