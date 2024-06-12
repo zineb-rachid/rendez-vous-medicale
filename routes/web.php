@@ -2,6 +2,7 @@
 
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\adminController;
 use App\Http\Controllers\doctorController;
 use App\Http\Controllers\signupController;
 use App\Http\Controllers\PatientController;
@@ -76,3 +77,31 @@ Route::get('/doctors/setting/{id}', [doctorController::class, 'setting'])->name(
 Route::get('/doctors/deleteAccount/{email}', [doctorController::class, 'deleteAccount'])->name('doctors_delete-account');
 
 Route::put('/doctors/settings/update/{docid}',[doctorController::class,'accountUpdate'])->name('doctors_setting_update');
+
+Route::get('/admin',[adminController::class,'index'])->name('admin_index');
+
+Route::get('/admin/doctors', [adminController::class, 'doctors'])->name('admin_doctors');
+
+Route::get('/admin/doctors/search', [adminController::class, 'index'])->name('admin_doctors_search');
+
+Route::put('/admin/doctors/{id}', [adminController::class, 'update'])->name('admin_doctors_update');
+
+Route::get('/admin/doctors/{doctor}', [adminController::class, 'delete'])->name('admin_doctors_delete');
+
+Route::post('/admin/storedoctor', [adminController::class, 'store'])->name('doctors.store');
+
+Route::get('/admin/schedule', [adminController::class, 'index'])->name('admin_schedule');
+
+Route::get('/admin/appointments',[adminController::class,'index'])->name('admin_appointments');
+
+Route::get('/admin/patient/{id}', [adminController::class, 'patients'])->name('admin_patients');
+
+Route::get('/admin/patients', [adminController::class, 'patients'])->name('admin_patients');
+
+Route::get('/admin/patients/search', [adminController::class, 'searchPatients'])->name('admin_patients_search');
+
+Route::get('/admin/appointment', [adminController::class, 'appointment'])->name('admin_appointments');
+
+Route::GET('/admin/appointment/filter', [adminController::class, 'filterAppointments'])->name('appointments.filter');
+
+Route::get('/admin/appointment/delete/{id}', [adminController::class, 'deleteAppointment'])->name('appointments.delete');

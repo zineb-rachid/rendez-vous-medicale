@@ -83,13 +83,6 @@
                         </button>
                     </a>
                     </td>
-                    <td>
-                        <form action="{{route('doctors_patient_search',['id'=>$user->id])}}" method="post" class="header-search">
-                            @csrf
-                            <input type="search" name="query" class="input-text header-searchbar" placeholder="Search Patient name or Email" list="patient">&nbsp;&nbsp;
-                            <input type="Submit" value="Search" name="search" class="login-btn btn-primary btn" style="padding-left: 25px;padding-right: 25px;padding-top: 10px;padding-bottom: 10px;">
-                        </form>
-                    </td>
                     <td width="15%">
                         <p style="font-size: 14px;color: rgb(119, 119, 119);padding: 0;margin: 0;text-align: right;">
                             Today's Date
@@ -116,22 +109,20 @@
                         <center>
                         <table class="filter-container" border="0" >
                             <tr>
-                            <form action="{{route('doctors_patient_search',['id'=>$user->id])}}" method="post">
-                                @csrf
-                                <td  style="text-align: right;">
-                                Show Details About : &nbsp;
+                                <td width="10%">
                                 </td>
+                                <td width="5%" style="text-align: center;">
+                                    Patient:
+                                    </td>
                                 <td width="30%">
-                                <select name="showonly" id="" class="box filter-container-items" style="width:90% ;height: 37px;margin: 0;" >
-                                            <option value="" disabled selected hidden> {{$current}} </option><br/>
-                                            <option value="my">My Patients Only</option><br/>
-                                            <option value="all">All Patients</option><br/>
-                                </select>
-                            </td>
-                            <td width="12%">
-                                <input type="submit"  name="filter" value=" Filter" class=" btn-primary-soft btn button-icon btn-filter"  style="padding: 15px; margin :0;width:100%">
-                        </form>
-                        </td>
+                                    <form action="{{route('doctors_patient_search',['id'=>$user->id])}}" method="post" class="header-search">
+                                        @csrf
+                                        <input type="search" name="query" id="search" class="input-text filter-container-items" style="margin: 0;width: 95%;" list="patient">&nbsp;&nbsp;
+                                </td>
+                                <td width="12%">
+                                        <input type="submit" name="filter" value=" Search" class="btn-primary-soft btn button-icon btn-filter" style="padding: 15px; margin: 0;width:100%">
+                                    </form>
+                                </td>
                     </tr>
                         </table>
 

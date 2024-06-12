@@ -181,52 +181,33 @@ class doctorController extends Controller
 
 
     public function patient($id)
-{
-    $today = now()->format('Y-m-d');
-    $user = User::find($id);
-    $useremail = $user->email;
-    $doctor = Doctor::where('docemail', $useremail)->first();
-    $docname = $doctor->docname;
-    $docemail = $doctor->docemail;
-    $search = request('query');
-    $showonly = request('showonly');
-    $current = 'My patients Only';
+    {
+        $today = now()->format('Y-m-d');
+        $user = User::find($id);
+        $useremail = $user->email;
+        $doctor = Doctor::where('docemail', $useremail)->first();
+        $docname = $doctor->docname;
+        $docemail = $doctor->docemail;
+        $search = request('query');
 
-    $scheduleIds = $doctor->schedule()->pluck('scheduleid');
+        $scheduleIds = $doctor->schedule()->pluck('scheduleid');
 
-    $appointments = Appointment::whereIn('scheduleid', $scheduleIds)->get();
+        $appointments = Appointment::whereIn('scheduleid', $scheduleIds)->get();
 
-    if ($search) {
-        $patients = Patient::where('pname', 'like', "%{$search}%")
-            ->orWhere('pemail', 'like', "%{$search}%")
-            ->get();
-    } else {
-        if ($showonly)
-        {
-            if ($showonly == 'all')
-            {
-                $patient = Patient::all();
-                $current='All Patients';
-            }
-            else
-            {
-                $patient = $appointments->map(function ($appointment) {
-                    return $appointment->patient;
-                });
-            }
-        }
-        else
-        {
-            $patient = $appointments->map(function ($appointment) {
+        if ($search) {
+            $patients = Patient::where('pname', 'like', "%{$search}%")
+                ->orWhere('pemail', 'like', "%{$search}%")
+                ->get();
+        } else {
+            $patients = $appointments->map(function ($appointment) {
                 return $appointment->patient;
-            });
+            })->unique('pemail')->values();
         }
-    }
-    $patients = $patient->unique('pemail')->values() ;
-    $patientsCount = $patients->count();
 
-    return view('doctor.patient', compact('today', 'user', 'docname', 'docemail', 'patients', 'patientsCount', 'current'));
-}
+        $patientsCount = $patients->count();
+
+        return view('doctor.patient', compact('today', 'user', 'docname', 'docemail', 'patients', 'patientsCount'));
+    }
 
 
 }
