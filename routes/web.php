@@ -54,35 +54,35 @@ Route::post('/patient/{id}/schedules',[PatientController::class,'schedule'])->na
 
 Route::get('/patient/{id}/schedules/{schedule}/{time}',[PatientController::class,'booking'])->name('patient-schedule-booking');
 
-Route::get('/doctors/{id}', [doctorController::class, 'index'])->name('doctors_index');
+Route::get('/doctor/{id}', [doctorController::class, 'index'])->name('doctors_index');
 
-Route::get('/doctors/appointment/{id}', [doctorController::class, 'appointment'])->name('doctors_appointment');
+Route::get('/doctor/appointment/{id}', [doctorController::class, 'appointment'])->name('doctors_appointment');
 
-Route::post('/doctors/appointment/{id}', [doctorController::class, 'appointment'])->name('doctors_appointment_search');
+Route::post('/doctor/appointment/{id}', [doctorController::class, 'appointment'])->name('doctors_appointment_search');
 
-Route::get('/doctors/dropAppointment/{id}', [doctorController::class, 'dropApp'])->name('doctors_appointment_delete');
+Route::get('/doctor/dropAppointment/{id}', [doctorController::class, 'dropApp'])->name('doctors_appointment_delete');
 
-Route::get('/doctors/schedule/{id}', [doctorController::class, 'schedule'])->name('doctors_schedule');
+Route::get('/doctor/schedule/{id}', [doctorController::class, 'schedule'])->name('doctors_schedule');
 
-Route::post('/doctors/schedule/{id}/',[doctorController::class,'schedule'])->name('doctors_schedule_search');
+Route::post('/doctor/schedule/{id}/',[doctorController::class,'schedule'])->name('doctors_schedule_search');
 
-Route::get('/doctors/schedule/delete/{scheduleid}',[doctorController::class,'dropSchedule'])->name('doctors_schedule_delete');
+Route::get('/doctor/schedule/delete/{scheduleid}',[doctorController::class,'dropSchedule'])->name('doctors_schedule_delete');
 
-Route::get('/doctors/patient/{id}', [doctorController::class, 'patient'])->name('doctors_patient');
+Route::get('/doctor/patient/{id}', [doctorController::class, 'patient'])->name('doctors_patient');
 
-Route::post('/doctors/patient/{id}', [doctorController::class, 'patient'])->name('doctors_patient_search');
+Route::post('/doctor/patient/{id}', [doctorController::class, 'patient'])->name('doctors_patient_search');
 
-Route::get('/doctors/setting/{id}', [doctorController::class, 'setting'])->name('doctors_setting');
+Route::get('/doctor/setting/{id}', [doctorController::class, 'setting'])->name('doctors_setting');
 
-Route::get('/doctors/deleteAccount/{email}', [doctorController::class, 'deleteAccount'])->name('doctors_delete-account');
+Route::get('/doctor/deleteAccount/{email}', [doctorController::class, 'deleteAccount'])->name('doctors_delete-account');
 
-Route::put('/doctors/settings/update/{docid}',[doctorController::class,'accountUpdate'])->name('doctors_setting_update');
+Route::put('/doctor/settings/update/{docid}',[doctorController::class,'accountUpdate'])->name('doctors_setting_update');
 
 Route::get('/admin',[adminController::class,'index'])->name('admin_index');
 
 Route::get('/admin/doctors', [adminController::class, 'doctors'])->name('admin_doctors');
 
-Route::get('/admin/doctors/search', [adminController::class, 'index'])->name('admin_doctors_search');
+Route::post('/admin/doctors/search', [adminController::class, 'index'])->name('admin_doctors_search');
 
 Route::put('/admin/doctors/{id}', [adminController::class, 'update'])->name('admin_doctors_update');
 
@@ -92,7 +92,11 @@ Route::post('/admin/storedoctor', [adminController::class, 'store'])->name('doct
 
 Route::get('/admin/schedule', [adminController::class, 'schedule'])->name('admin_schedule');
 
-Route::get('/admin/appointments',[adminController::class,'index'])->name('admin_appointments');
+Route::post('/admin/schedule', [adminController::class, 'schedule'])->name('admin_schedule_search');
+
+Route::get('/admin/schedule/delete/{id}', [adminController::class, 'deleteSchedule'])->name('admin_schedule_delete');
+
+Route::post('/admin/schedule/add', [adminController::class, 'addSchedule'])->name('admin_schedule_add');
 
 Route::get('/admin/patient/{id}', [adminController::class, 'patients'])->name('admin_patients');
 
@@ -100,10 +104,8 @@ Route::get('/admin/patients', [adminController::class, 'patients'])->name('admin
 
 Route::get('/admin/patients/search', [adminController::class, 'searchPatients'])->name('admin_patients_search');
 
-Route::get('/admin/appointment', [adminController::class, 'appointment'])->name('admin_appointments');
+Route::get('/admin/appointment', [adminController::class, 'appointment'])->name('admin_appointment');
 
-Route::GET('/admin/appointment/filter', [adminController::class, 'filterAppointments'])->name('appointments.filter');
+Route::post('/admin/appointment/search', [adminController::class, 'appointment'])->name('admin_appointment_search');
 
 Route::get('/admin/appointment/delete/{id}', [adminController::class, 'deleteAppointment'])->name('appointments.delete');
-
-Route::get('/admin/schedule', [adminController::class, 'schedule'])->name('admin_schedule');

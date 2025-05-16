@@ -9,6 +9,7 @@ use App\Models\schedule;
 use App\Models\appointment;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,7 +17,6 @@ class PatientController extends Controller
 {
     public function index($id)
     {
-
         $today = now()->format('Y-m-d');
 
         $user = User::find($id);
@@ -118,17 +118,36 @@ class PatientController extends Controller
     }
 
 
-
     public function update($pid)
     {
-        $patient = Patient::find($pid);
-        $patientemail=$patient->pemail;
-        $user=user::where("email",$patientemail)->first();
+        $patient = Patient::findOrFail($pid);
+        $user = User::where('email', $patient->pemail)->firstOrFail();
 
-        $user->email=request('pemail');
+        $newEmail = strtolower(trim(request('pemail')));
+        $oldEmail = strtolower(trim($patient->pemail));
+
+        if ($newEmail !== $oldEmail) {
+            $emailExistsInPatients = Patient::where('pemail', $newEmail)
+                ->where('pid', '!=', $pid)
+                ->exists();
+
+            $emailExistsInUsers = User::where('email', $newEmail)
+                ->where('id', '!=', $user->id)
+                ->exists();
+
+            if ($emailExistsInPatients || $emailExistsInUsers) {
+                return redirect()->back()->withErrors(['error' => 'Email already in use. Please choose another.'])->withInput();
+            }
+
+            $patient->pemail = $newEmail;
+            $user->email = $newEmail;
+
+            if (auth()->check() && auth()->user()->id == $user->id) {
+                Auth::login($user);
+            }
+        }
 
         $patient->pname = request('pname');
-        $patient->pemail = request('pemail');
         $patient->pnic = request('pnic');
         $patient->paddress = request('paddress');
         $patient->ptel = request('ptel');
@@ -136,21 +155,24 @@ class PatientController extends Controller
         $pass = request('ppassword');
         $cpass = request('cpassword');
 
-        if ($pass === $cpass)
-        {
-            $patient->ppassword = Hash::make($pass);
-            $user->password = Hash::make($pass);
+        if (!empty($pass) || !empty($cpass)) {
+            if ($pass === $cpass) {
+                $patient->ppassword = Hash::make($pass);
+                $user->password = Hash::make($pass);
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Password confirmation error! Reconfirm password.'])->withInput();
+            }
         }
-        else
-        {
-            return redirect()->back()->withErrors(['error' => 'Password confirmation error! Reconfirm password.']);
-        }
+
 
         $patient->save();
         $user->save();
 
-        return redirect()->route('patient-settings',['id'=>$user->id]);
+        return redirect()->route('patient-settings', ['id' => $user->id])
+                         ->with('success', 'Account updated successfully.');
     }
+
+
 
 
     public function deleteAccount($email)

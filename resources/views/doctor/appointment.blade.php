@@ -220,7 +220,7 @@
                                             <img src="{{ asset('img/notfound.png') }}" width="25%">
                                             <br>
                                             <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
-                                            
+
                                             </center>
                                             <br><br><br><br>
                                         </td>

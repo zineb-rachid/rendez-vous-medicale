@@ -94,7 +94,7 @@
                                 </td>
                             </tr>
                         </table>
-                    </td>                
+                    </td>
                 </tr>
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-home " >
@@ -148,7 +148,7 @@
                         <button class="btn-label" style="display: flex;justify-content: center;align-items: center;">
                             <img src="{{ asset('/img/calendar.svg')}}" width="100%">
                         </button>
-                    </td>      
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="4">
@@ -169,10 +169,10 @@
                                                     <div class="h3-dashboard" style="font-size: 15px;">
                                                         Edit your Account Details & Change Password
                                                     </div>
-                                                </div>                                                
+                                                </div>
                                             </div>
                                         </a>
-                                    </td>    
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td colspan="4">
@@ -189,7 +189,7 @@
                                                     <div class="h3-dashboard" style="font-size: 15px;">
                                                         View Personal information About Your Account
                                                     </div>
-                                                </div>                                                    
+                                                </div>
                                             </div>
                                         </a>
                                     </td>
@@ -209,7 +209,7 @@
                                                     <div class="h3-dashboard" style="font-size: 15px;">
                                                         Will Permanently Remove your Account
                                                     </div>
-                                                </div>                        
+                                                </div>
                                             </div>
                                         </a>
                                     </td>
@@ -231,8 +231,8 @@
                 <div id='popup-content' class='content'>
                     <div style='display: flex;justify-content: center;'>
                             <div class='abc'>
-                                <table width='80%' class='sub-table scrolldown add-doc-form-container' border='0'> 
-                                    <form  action=".route('patient-settings-update',['pid'=>$patient->pid]) . " method='POST' class='add-new-form'>";
+                                <table width='80%' class='sub-table scrolldown add-doc-form-container' border='0'>
+                                    <form  action=".route('patient-settings-update',['pid'=>$patient->pid,'id'=>$user->id]) . " method='POST' class='add-new-form'>";
                                         @endphp
                                         @csrf
                                         @method('put')
@@ -245,7 +245,7 @@
                                     </tr>
                                     <tr>
                                         <td class='label-td' colspan='2'>
-                                           
+
                                             <label for='Email' class='form-label'>Email: </label>
                                         </td>
                                     </tr>
@@ -255,7 +255,7 @@
                                         <input type='email' name='pemail' class='input-text' placeholder='Email Address' value='".$patient->pemail."' required><br>
                                         </td>
                                     <tr>
-                                        
+
                                         <td class='label-td' colspan='2'>
                                             <label for='pname' class='form-label'>Name: </label>
                                         </td>
@@ -264,9 +264,9 @@
                                         <td class='label-td' colspan='2'>
                                             <input type='text' name='pname' class='input-text' placeholder='Doctor Name' value='".$patient->pname."' required><br>
                                         </td>
-                                        
+
                                     </tr>
-                                    
+
                                     <tr>
                                         <td class='label-td' colspan='2'>
                                             <label for='pnic' class='form-label'>NIC: </label>
@@ -290,7 +290,7 @@
                                     <tr>
                                         <td class='label-td' colspan='2'>
                                             <label for='paddress' class='form-label'>Address</label>
-                                            
+
                                         </td>
                                     </tr>
                                     <tr>
@@ -323,7 +323,7 @@
                                                 <img src='" . asset('/img/icons/eye.svg') . "' class='toggle-password' onclick='togglePassword()'>
                                             </div>
                                         </td>
-                                    </tr>                                    
+                                    </tr>
                                     <tr>
                                         <td>
                                             "  @endphp
@@ -336,16 +336,16 @@
                                             @endif
                                             @php echo "
                                         </td>
-                                    </tr> 
+                                    </tr>
                                     <tr>
                                         <td colspan='2'>
                                             <input type='reset' value='Reset'  class='login-btn btn-primary-soft btn' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        
+
                                             <input type='submit' value='Save'  class='login-btn btn-primary btn'>
                                         </td>
-                        
+
                                     </tr>
-                                
+
                                     </form>
                                     </tr>
                                 </table>
@@ -358,12 +358,12 @@
     }
 @endphp
 
-    <div id="popup1" class="overlay">
-        <div class="popup">
+    <div id="popup1" class="overlay" >
+        <div class="popup" >
             <center>
                 <a class="close" onclick="hidePopup()">&times;</a>
                 <div id="popup-content" class="content">
-                   
+
                 </div>
             </center>
         </div>
@@ -382,13 +382,13 @@
 
             document.getElementById('popup-content').innerHTML = `
             <div class="abc">
-                <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">            
+                <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
                     <tr>
                         <td>
                             <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">View Details.</p><br><br>
                         </td>
-                    </tr>                
-                    <tr>                    
+                    </tr>
+                    <tr>
                         <td class="label-td" colspan="2">
                             <label for="name" class="form-label">Name: </label>
                         </td>
@@ -396,7 +396,7 @@
                     <tr>
                         <td class="label-td" colspan="2">
                             ${patientDetails.name}<br><br>
-                        </td>                    
+                        </td>
                     </tr>
                     <tr>
                         <td class="label-td" colspan="2">
@@ -430,7 +430,7 @@
                     </tr>
                     <tr>
                         <td class="label-td" colspan="2">
-                            <label for="spec" class="form-label">Address: </label>                        
+                            <label for="spec" class="form-label">Address: </label>
                         </td>
                     </tr>
                     <tr>
@@ -450,7 +450,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button class="login-btn btn-primary-soft btn" onclick="hidePopup()">OK</button>             
+                            <button class="login-btn btn-primary-soft btn" onclick="hidePopup()">OK</button>
                         </td>
                     </tr>
                 </table><br/><br/>
@@ -469,7 +469,7 @@
                 You want to delete Your Account<br>(${user.name}).
             </div>
             <div style="display: flex;justify-content: center;">
-            <a href="{{route('patient-delete-account',['email'=>$user->email])}}" class="non-style-link">
+            <a href="{{route('patient-delete-account',['email'=>$user->email,'id'=>$user->id])}}" class="non-style-link">
                 <button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;">
                 <font class="tn-in-text">&nbsp;Yes&nbsp;</font></button></a>&nbsp;&nbsp;&nbsp;
             <a href="{{route('patient-settings',['id'=>$user->id])}}" class="non-style-link">

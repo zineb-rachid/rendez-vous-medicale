@@ -28,11 +28,12 @@
             align-items: center;
         }
         .popup {
+            margin-top: 15%;
             background: white;
             padding: 20px;
             border-radius: 8px;
             width: 80%;
-            max-width: 500px;
+            max-width: 600px;
         }
         .close {
             cursor: pointer;
@@ -55,8 +56,8 @@
                                     <img src="{{ asset('img/user.png') }}" alt="" width="100%" style="border-radius:50%">
                                 </td>
                                 <td style="padding:0;margin:0;">
-                                    <p class="profile-title">Administrator</p>
-                                    <p class="profile-subtitle">admin@edoc.com</p>
+                                    <p class="profile-title">{{$user->name}}</p>
+                                    <p class="profile-subtitle">{{$user->email}} </p>
                                 </td>
                             </tr>
                             <tr>
@@ -84,7 +85,7 @@
                 </tr>
                 <tr class="menu-row">
                     <td class="menu-btn menu-icon-appoinment">
-                        <a href="{{ route('admin_appointments') }}" class="non-style-link-menu"><div><p class="menu-text">Appointment</p></div></a>
+                        <a href="{{ route('admin_appointment') }}" class="non-style-link-menu"><div><p class="menu-text">Appointment</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">
@@ -166,8 +167,9 @@
                                                 <td>{{ $doctor->specialities->sname ?? 'N/A' }}</td>
                                                 <td>
                                                     <div style="display:flex;justify-content: center;">
-                                                       <button  class="btn-primary-soft btn button-icon btn-edit" style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><a href="?action=edit&docid={{ $doctor->docid }}" class="non-style-link">Edit</a></button>
-
+                                                        <button  class="btn-primary-soft btn button-icon btn-edit" style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
+                                                            <a href="?action2=edit&docid={{ $doctor->docid }}"
+                                                                class="non-style-link">Edit</a></button>
                                                         &nbsp;&nbsp;&nbsp;
                                                         <button class="btn-primary-soft btn button-icon btn-view" style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;" onclick="showPopup({{ $doctor}})">
                                                             <font class="tn-in-text">View</font>
@@ -175,7 +177,8 @@
                                                         &nbsp;&nbsp;&nbsp;
                                                         <a href="{{ url('doctor/sessions', $doctor->docid) }}" class="non-style-link" >
                                                             <button class="btn-primary-soft btn button-icon btn-delete" style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;">
-                                                                <a href="{{ route('admin_doctors_delete', ['doctor' => $doctor]) }}" class="non-style-link">Remove</a>
+                                                                <a href="{{ route('admin_doctors_delete', ['doctor' => $doctor]) }}"
+                                                                    class="non-style-link">Remove</a>
 
                                                             </button>
                                                         </a>
@@ -253,11 +256,12 @@
 
 
 @php
-$action = isset($_GET['action']) ? $_GET['action'] : null;
-
+$action = isset($_GET['action2']) ? $_GET['action2'] : null;
+$docid = isset($_GET['docid']) ? $_GET['docid'] : null;
 if(isset($action)){
-
-   echo "<div id='popup1' class='overlay' style='display:flex'>
+    if($action== "edit"&& $docid){
+        $doctor = App\Models\Doctor::find($docid);
+   echo "cdefvd<div id='popup1' class='overlay' style='display:flex'>
    <div class='popup'>
        <center>
            <a href=".route('admin_doctors')." class='close'>&times;</a>
@@ -265,10 +269,10 @@ if(isset($action)){
                <div style='display: flex;justify-content: center;'>
                        <div class='abc'>
                            <table width='80%' class='sub-table scrolldown add-doc-form-container' border='0'>
-                               <form  action=".route('doctors.store') . " method='POST' class='add-new-form'>";
+                               <form  action=".route('admin_doctors_update',['id'=>$docid]) . " method='POST' class='add-new-form'>";
                                    @endphp
                                    @csrf
-                                   @method('post')
+                                   @method('put')
                                    @php echo "
                                <tr>
                                    <td>
@@ -327,7 +331,7 @@ if(isset($action)){
                                </tr>
                                <tr>
                                    <td class='label-td' colspan='2'>
-                                       <div class='password-container'>
+                                       <div class='password-container' style='display: flex'>
                                            <input type='password' name='docpassword' class='input-text' placeholder='Password' required>
                                            <img src='" . asset('/img/icons/eye.svg') . "' class='toggle-password' onclick='togglePassword()'>
                                        </div>
@@ -340,7 +344,7 @@ if(isset($action)){
                                </tr>
                                <tr>
                                    <td class='label-td' colspan='2'>
-                                       <div class='password-container'>
+                                       <div class='password-container' style='display: flex'>
                                            <input type='password' name='cpassword' class='input-text' placeholder='Confirm Password' required>
                                            <img src='" . asset('/img/icons/eye.svg') . "' class='toggle-password' onclick='togglePassword()'>
                                        </div>
@@ -376,6 +380,7 @@ if(isset($action)){
        </center>
    </div>
 </div>" ;
+}
 }
 @endphp
 
@@ -450,7 +455,7 @@ if(isset($action)){
                                </tr>
                                <tr>
                                    <td class='label-td' colspan='2'>
-                                       <div class='password-container'>
+                                       <div class='password-container' style='display: flex'>
                                            <input type='password' name='docpassword' class='input-text' placeholder='Password' required>
                                            <img src='" . asset('/img/icons/eye.svg') . "' class='toggle-password' onclick='togglePassword()'>
                                        </div>
@@ -489,7 +494,18 @@ if(isset($action)){
 </div>" ;
 }
 @endphp
-
+<script>
+    function togglePassword(){
+               const input = event.target.previousElementSibling;
+               if (input.type == "password") {
+                   input.type = "text";
+                   event.target.src = "{{ asset('/img/icons/eye-off.svg') }}";
+               } else {
+                   input.type = "password";
+                   event.target.src = "{{ asset('/img/icons/eye.svg') }}";
+               }
+           }
+</script>
 
 </body>
 </html>

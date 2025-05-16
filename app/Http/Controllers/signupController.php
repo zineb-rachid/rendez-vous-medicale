@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 class SignupController extends Controller
 {
-   public function signup(Request $request){
+    public function signup(Request $request){
         $request->validate([
             "pemail" => 'required|string|unique:patients,pemail',
             "fname" => 'required|alpha',
@@ -26,57 +26,48 @@ class SignupController extends Controller
         $patient = new patient();
         $patient->pemail = $request->input('pemail');
         $patient->pname = $request->input('fname') . ' ' . $request->input('lname');
-        $patient->ppassword = $request->input('ppassword');
+        $patient->ppassword = Hash::make($request->input('ppassword'));
         $patient->paddress = $request->input('paddress');
         $patient->pnic = $request->input('pnic');
         $patient->pdob = $request->input('pdob');
         $patient->ptel = $request->input('ptel');
         $patient->save();
-        $user=new User;
-        $user->name=$request->input('fname') . ' ' . $request->input('lname');
-        $user->email=$request->input('pemail');
-        $user->password=$request->input('ppassword');
-        $user->role='p';
+
+        $user = new User();
+        $user->name = $patient->pname;
+        $user->email = $patient->pemail;
+        $user->password = Hash::make($request->input('ppassword'));
+        $user->role = 'p';
         $user->save();
+
         return redirect()->route('login');
-   }
-   public function connecter(Request $request)
+    }
+
+    public function connecter(Request $request)
     {
         $request->validate([
             'useremail' => 'required|string|email',
             'userpassword' => 'required|string'
         ]);
 
-        $user = User::where('email', $request->input('useremail'))->first();
+        if (Auth::attempt(['email' => $request->input('useremail'), 'password' => $request->input('userpassword')])) {
+            $user = Auth::user(); 
 
-        if ($user ) {
-
-            if( $request->input('userpassword') == $user->password)
-            {
-                if ($user->role == 'p') 
-                {
-                    return redirect()->route('patient_index',['id'=>$user]);
-                }
-                 elseif ($user->role == 'd') 
-                 {
-                    return redirect()->route('doctors_index',['id'=>$user]);
-                }
-                 elseif ($user->role == 'a') 
-                 {
-                    return redirect()->route('admin_index');
-                }
-            } 
-            else 
-            {
-                return redirect()->back()->withErrors(['error' => 'Wrong credentials: Invalid email or password.']);
+            if ($user->role == 'p') {
+                return redirect()->route('patient_index', ['id' => $user->id]);
+            } elseif ($user->role == 'd') {
+                return redirect()->route('doctors_index', ['id' => $user->id]);
+            } elseif ($user->role == 'a') {
+                return redirect()->route('admin_index');
             }
-        }
-        else 
-        {
-            return redirect()->back()->withErrors(['error' => 'We cant found any acount for this email.']);
+        } else {
+            return redirect()->back()->withErrors(['error' => 'Wrong credentials: Invalid email or password.']);
         }
     }
+
     public function logout(){
+        Auth::logout();
         return redirect()->route('login');
     }
+
 }

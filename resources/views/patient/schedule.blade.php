@@ -39,6 +39,17 @@
             right: 10px;
             font-size: 20px;
         }
+        .sessions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+        }
+        .dashboard-items {
+            width: 100% !important;
+            margin: 0 !important;
+        }
 
     </style>
 </head>
@@ -158,53 +169,43 @@
                     <td colspan="4">
                         <center>
                             <div class="abc">
-                                <table width="100%" class="sub-table scrolldown" border="0" style="padding: 50px; border:none;">
-                                    <tbody>
-                                        @forelse ($schedule as $sc)
-                                            <tr>
-                                                <td style="width: 25%;">
-                                                    <div class="dashboard-items search-items">
-                                                        <div style="width:100%">
-                                                            <div class="h1-search">
-                                                                {{ $sc->title }}
-                                                            </div>
-                                                            <br>
-                                                            <div class="h3-search">
-                                                                {{ $sc->doctor->docname }}
-                                                            </div>
-                                                            <div class="h4-search">
-                                                                {{ $sc->scheduledate }}<br>Starts: <b>@ {{ substr($sc->scheduletime, 0, 5) }}</b> (8h)
-                                                            </div>
-                                                            <br>
-                                                            <a onclick="book({{ json_encode($sc) }}, {{$sc->appointment->pluck('apptime')}})">
-                                                                <button class="login-btn btn-primary-soft btn" style="padding-top:11px; padding-bottom:11px; width:100%;">
-                                                                    <font class="tn-in-text">Book Now</font>
-                                                                </button>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="4">
-                                                    <br><br><br><br>
-                                                    <center>
-                                                        <img src="{{ asset('img/notfound.png') }}" width="25%">
-                                                        <br>
-                                                        <p class="heading-main12" style="margin-left: 45px; font-size:20px; color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
-                                                        <a class="non-style-link" href="{{ route('patient-schedule', ['id' => $user->id]) }}">
-                                                            <button class="login-btn btn-primary-soft btn" style="display: flex; justify-content: center; align-items: center; margin-left:20px;">
-                                                                &nbsp; Show all Sessions &nbsp;
-                                                            </button>
-                                                        </a>
-                                                    </center>
-                                                    <br><br><br><br>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                <div class="appointments-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; padding: 30px; width: 90%; margin: 0 auto;">
+                                    @forelse ($schedule as $sc)
+                                        <div class="session-card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                                            <div style="width:100%">
+                                                <div class="h1-search" style="font-size: 20px; margin-bottom: 15px;">
+                                                    {{ $sc->title }}
+                                                </div>
+                                                <div class="h3-search" style="color: #3b3a3a; margin-bottom: 10px;">
+                                                    {{ $sc->doctor->docname }}
+                                                </div>
+                                                <div class="h4-search" style="color: #3b3a3a;">
+                                                    {{ $sc->scheduledate }}<br>
+                                                    Starts: <b>@ {{ substr($sc->scheduletime, 0, 5) }}</b> (24h)
+                                                </div>
+                                                <br>
+                                                <a onclick="book({{ json_encode($sc) }}, {{$sc->appointment->pluck('apptime')}})">
+                                                    <button class="login-btn btn-primary-soft btn" style="width: 100%; padding: 12px;">
+                                                        <font class="tn-in-text">Book Now</font>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div style="width: 100%; text-align: center; padding: 50px; grid-column: 1 / -1;">
+                                            <img src="{{ asset('img/notfound.png') }}" width="25%">
+                                            <br>
+                                            <p class="heading-main12" style="margin-top: 20px; font-size:20px; color:rgb(49, 49, 49)">
+                                                We couldn't find anything related to your keywords!
+                                            </p>
+                                            <a class="non-style-link" href="{{ route('patient-schedule', ['id' => $user->id]) }}">
+                                                <button class="login-btn btn-primary-soft btn" style="margin-top: 20px;">
+                                                    &nbsp; Show all Sessions &nbsp;
+                                                </button>
+                                            </a>
+                                        </div>
+                                    @endforelse
+                                </div>
                             </div>
                         </center>
                     </td>

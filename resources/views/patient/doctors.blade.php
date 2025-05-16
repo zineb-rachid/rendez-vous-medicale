@@ -169,7 +169,8 @@
                                                 <td>{{ $doctor->specialities->sname ?? 'N/A' }}</td>
                                                 <td>
                                                     <div style="display:flex;justify-content: center;">
-                                                        <button class="btn-primary-soft btn button-icon btn-view" style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;" onclick="showPopup({{ $doctor}})">
+                                                        <button class="btn-primary-soft btn button-icon btn-view"
+                                                        style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;" onclick="showPopup({{ $doctor}})">
                                                             <font class="tn-in-text">View</font>
                                                         </button>
                                                         &nbsp;&nbsp;&nbsp;
@@ -189,7 +190,7 @@
                                                         <img src="{{ asset('img/notfound.svg') }}" width="25%">
                                                         <br>
                                                         <p class="heading-main12" style="font-size:20px;color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
-                                                        
+
                                                     </center>
                                                     <br><br><br><br>
                                                 </td>

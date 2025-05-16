@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class AuthenticatePatient
+class AuthenticateDoctor
 {
     /**
      * Handle an incoming request.
@@ -17,9 +16,9 @@ class AuthenticatePatient
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->check() && auth::user()->role == 'p') {
+        if (auth()->check() && auth()->user()->role == 'd') {
             return $next($request);
         }
-        return redirect('/login');
+        return redirect('/login')->with('error', 'Unauthorized access');
     }
 }

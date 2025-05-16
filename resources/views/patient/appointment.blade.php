@@ -40,11 +40,32 @@
             right: 10px;
             font-size: 20px;
         }
+        .abc.scroll {
+            height: 360px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ccc; 
+        }
+        .appointments-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 10px;
+        }
 
+        .dashboard-items.search-items {
+            width: calc(33.33% - 20px);
+            min-width: 250px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 15px;
+            background-color: white;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" style="overflow: hidden">
         <div class="menu">
             <table class="menu-container" border="0">
                 <tr>
@@ -170,45 +191,46 @@
                                 <table width="93%" class="sub-table scrolldown" border="0" style="border:none;">
                                     <tbody>
                                         <tr>
-                                            <td style="width: 25%;">
-                                                @forelse($appointments as $app)
-                                                <div class="dashboard-items search-items" >
-                                                    <div style="width:100%;">
-                                                        <div class="h3-search">
-                                                            Booking Date: {{$app->appdate}} <br>
-                                                            Bokking Time: {{$app->apptime }}
+                                            <td style="width: 25%;" colspan="4">
+                                                <div class="appointments-grid">
+                                                    @forelse($appointments as $app)
+                                                    <div class="dashboard-items search-items" >
+                                                        <div style="width:100%;">
+                                                            <div class="h3-search">
+                                                                Booking Date: {{$app->appdate}} <br>
+                                                                Bokking Time: {{$app->apptime }}
+                                                            </div>
+                                                            <div class="h1-search">
+                                                                {{$app->schedule->title}} <br>
+                                                            </div>
+                                                            <div class="h3-search">
+                                                                Appointment Number:<div class="h1-search">{{$app->appnum}}</div>
+                                                            </div>
+                                                            <div class="h3-search">
+                                                            {{$app->schedule->doctor->docname}}
+                                                            </div>
+                                                            <div class="h4-search">
+                                                                Scheduled Date: {{$app->schedule->scheduledate}} <br> Starts: {{$app->schedule->scheduletime}}
+                                                            </div>
+                                                            <br>
+                                                            <button class="login-btn btn-primary-soft btn" style="padding-top:11px;padding-bottom:11px;width:100%" onclick="showPopup({{ $app }})">
+                                                                <font class="tn-in-text">Cancel Booking</font>
+                                                            </button>
                                                         </div>
-                                                        <div class="h1-search">
-                                                            {{$app->schedule->title}} <br>
-                                                        </div>
-                                                        <div class="h3-search">
-                                                            Appointment Number:<div class="h1-search">{{$app->appnum}}</div>
-                                                        </div>
-                                                        <div class="h3-search">
-                                                           {{$app->schedule->doctor->docname}}
-                                                        </div>
-                                                        <div class="h4-search">
-                                                            Scheduled Date: {{$app->schedule->scheduledate}} <br> Starts: {{$app->schedule->scheduletime}}
-                                                        </div>
-                                                        <br>
-                                                        <button class="login-btn btn-primary-soft btn" style="padding-top:11px;padding-bottom:11px;width:100%" onclick="showPopup({{ $app }})">
-                                                            <font class="tn-in-text">Cancel Booking</font>
-                                                        </button>
                                                     </div>
+                                                    @empty
                                                 </div>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="7">
-                                                        <br><br><br><br>
-                                                        <center>
-                                                        <img src="{{ asset('img/notfound.png') }}" width="25%">
-                                                        <br>
-                                                        <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
-                                                        
-                                                        </center>
-                                                        <br><br><br><br>
-                                                    </td>
-                                                </tr>
+                                        <tr>
+                                            <td colspan="7">
+                                                <br><br><br><br>
+                                                <center>
+                                                    <img src="{{ asset('img/notfound.png') }}" width="25%">
+                                                    <br>
+                                                    <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldn't find anything related to your keywords!</p>
+                                                </center>
+                                                <br><br><br><br>
+                                            </td>
+                                        </tr>
                                                 @endforelse
                                             </td>
                                         </tr>

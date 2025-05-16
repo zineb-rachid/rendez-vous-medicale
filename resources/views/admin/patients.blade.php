@@ -58,8 +58,8 @@
                                     <img src="{{ asset('img/user.png') }}" alt="" width="100%" style="border-radius:50%">
                                 </td>
                                 <td style="padding:0px;margin:0px;">
-                                    <p class="profile-title">Administrator</p>
-                                    <p class="profile-subtitle">admin@edoc.com</p>
+                                    <p class="profile-title">{{$user->name}}</p>
+                                    <p class="profile-subtitle">{{$user->email}} </p>
                                 </td>
                             </tr>
                             <tr>
@@ -89,7 +89,7 @@
                 </tr>
                 <tr class="menu-row">
                     <td class="menu-btn menu-icon-appoinment">
-                        <a href="{{ route('admin_appointments') }}" class="non-style-link-menu"><div><p class="menu-text">Appointment</p></div></a>
+                        <a href="{{ route('admin_appointment') }}" class="non-style-link-menu"><div><p class="menu-text">Appointment</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row">
@@ -204,7 +204,7 @@
     </div>
     <div id="popup1" class="overlay">
         <div class="popup">
-            <button class="close" onclick="hidePopup()">&times;</button>
+            <a class="close" onclick="hidePopup()">&times;</a>
             <div id="popup-content">
             </div>
         </div>

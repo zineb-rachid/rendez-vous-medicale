@@ -16,7 +16,7 @@ class adminController extends Controller
 {
     public function index(){
         $today = now()->format('Y-m-d');
-
+        $user=User::where('role','a')->first();
 
         $doctorsCount = DB::table('doctor')->get();
         $patients = DB::table('patients')->get();
@@ -43,6 +43,7 @@ class adminController extends Controller
                 ->orWhere('doctor.docemail', "LIKE", "%{$search}%")
                 ->whereBetween('schedule.scheduledate', [$today, $nextWeek])
                 ->orderBy('schedule.scheduledate', 'desc')
+                ->orderBy('schedule.scheduletime', 'asc')
                 ->select('appointment.appid', 'schedule.scheduleid', 'schedule.title', 'doctor.docname', 'patients.pname', 'schedule.scheduledate', 'schedule.scheduletime', 'appointment.appnum', 'appointment.appdate')
                 ->get();
 
@@ -52,6 +53,7 @@ class adminController extends Controller
                 ->where('doctor.docname', $search)
                 ->orWhere('doctor.docemail', "LIKE", "%{$search}%")
                 ->orderBy('schedule.scheduledate', 'desc')
+                ->orderBy('schedule.scheduletime', 'asc')
                 ->select('schedule.scheduleid', 'schedule.title', 'doctor.docname', 'schedule.scheduledate', 'schedule.scheduletime', 'schedule.nop')
                 ->get();
         } else {
@@ -62,6 +64,7 @@ class adminController extends Controller
                 ->join('doctor', 'doctor.docid', '=', 'schedule.docid')
                 ->whereBetween('schedule.scheduledate', [$today, $nextWeek])
                 ->orderBy('schedule.scheduledate', 'desc')
+                ->orderBy('schedule.scheduletime', 'asc')
                 ->select('appointment.appid', 'schedule.scheduleid', 'schedule.title', 'doctor.docname', 'patients.pname', 'schedule.scheduledate', 'schedule.scheduletime', 'appointment.appnum', 'appointment.appdate')
                 ->get();
 
@@ -69,18 +72,20 @@ class adminController extends Controller
                 ->join('doctor', 'schedule.docid', '=', 'doctor.docid')
                 ->whereBetween('schedule.scheduledate', [$today, $nextWeek])
                 ->orderBy('schedule.scheduledate', 'desc')
+                ->orderBy('schedule.scheduletime', 'asc')
                 ->select('schedule.scheduleid', 'schedule.title', 'doctor.docname', 'schedule.scheduledate', 'schedule.scheduletime', 'schedule.nop')
                 ->get();
         }
 
-        return view('admin.index', compact('doctorsCount', 'doctors', 'patients', 'appointments', 'schedules', 'upcomingAppointments', 'upcomingSessions', 'today', "nextWeek"));
+        return view('admin.index', compact('doctorsCount','user', 'doctors', 'patients', 'appointments', 'schedules', 'upcomingAppointments', 'upcomingSessions', 'today', "nextWeek"));
     }
 
     public function doctors(){
         $today = now()->format('Y-m-d');
         $specialities=specialities::all();
+        $user=User::where('role','a')->first();
         $doctors = doctor::orderBy('docid', 'desc')->get();
-        return view("admin.doctors", compact(["doctors", "today","specialities"]));
+        return view("admin.doctors", compact(["doctors", "today","specialities","user"]));
     }
     public function update(Request $request, $id)
     {
@@ -101,19 +106,17 @@ $specialitie=specialities::all();
 {
 
     $schedule = Schedule::where("docid", $doctor->docid)->first();
+    $user = User::where('email', 'LIKE' ,value: "%{$doctor->docemail}")->first();
 
     if ($schedule) {
         $appointment = Appointment::where("scheduleid", $schedule->scheduleid);
-
-        $user = User::where("email", $doctor->docemail)->first();
-
         $appointment->delete();
-        if ($user) {
-            $user->delete();
-        }
+
         $schedule->delete();
     }
-
+    if ($user) {
+        $user->delete();
+    }
     $doctor->delete();
 
     return redirect()->route('admin_doctors');
@@ -138,12 +141,14 @@ public function store (Request $request){
    return redirect()->route('admin_doctors');
 }
     public function patients(){
+        $user=User::where('role','a')->first();
         $today = now()->format('Y-m-d');
         $patients = patient::orderBy('pid', 'desc')->get();
-        return view("admin.patients", compact(["patients", "today"]));
+        return view("admin.patients", compact(["patients", "today","user"]));
     }
 
     public function searchPatients(Request $request){
+        $user=User::where('role','a')->first();
         $today = now()->format('Y-m-d');
         $search = $request->input('search');
 
@@ -156,64 +161,79 @@ public function store (Request $request){
             $patients = patient::orderBy('pid', 'desc')->get();
         }
 
-        return view("admin.patients", compact(["patients", "today"]));
+        return view("admin.patients", compact(["patients", "today",'user']));
     }
-    public function appointment(){
+    public function appointment(Request $request) {
         $today = now()->format('Y-m-d');
-        $doctors = Doctor::all();
-        $appointments = Appointment::with(['patient', 'schedule'])->orderBy('appid', 'desc')->get();
+        $user = User::where('role', 'a')->first();
+        $docname = $request->input('docname');
+        $date = $request->input('search');
 
-        return view("admin.appointments", compact("appointments", "today", "doctors"));
-    }
-
-    public function filterAppointments(Request $request)
-    {
-        $request->validate([
-            'docname' => 'required',
-            'search' => 'required',
-        ]);
-
-        $doctors = Doctor::all();
-        $apps = Appointment::all();
-        $filtereddoctor = $request->input("docname");
-        $search = $request->input('search');
-
-        $doctor = Doctor::where('docname', '=', $filtereddoctor)->first();
-
-        $filteredAppointments = collect();
-
-        if ($doctor) {
-            $schedules = Schedule::where('scheduledate', 'LIKE', "%{$search}%")
-                                ->orWhere('scheduledate', $search)
-                                ->where('docid',"=",$doctor->docid)
-                                ->pluck('scheduleid');
-
-            $filteredAppointments = Appointment::whereIn('scheduleid', $schedules)->get();
+        if ($docname) {
+            $doctor = Doctor::where('docname', $docname)->first();
+            $schedules = Schedule::where('docid', $doctor->docid)->get();
+            $scheduleIds = $schedules->pluck('scheduleid');
+            $appointments = Appointment::whereIn('scheduleid', $scheduleIds)->get();
+        } elseif (strtotime($date) !== false) {
+            $schedules = Schedule::where('scheduledate', 'LIKE', "%{$date}%")->get();
+            $scheduleIds = $schedules->pluck('scheduleid');
+            $appointments = Appointment::whereIn('scheduleid', $scheduleIds)->get();
+        } else {
+            $doctors = Doctor::all();
+            $appointments = Appointment::with(['patient', 'schedule'])->orderBy('appid', 'desc')->get();
         }
 
-        $appointmentsCount = $apps->count(); // Adjusted variable name to appointmentsCount
+        $doctors = $doctors ?? Doctor::all();
 
-        return view('admin.appointments', [
-            'filteredAppointments' => $filteredAppointments,
-            'doctors' => $doctors,
-            'appointmentsCount' => $appointmentsCount // Corrected variable name here
-        ]);
+        return view("admin.appointments", compact("user", "appointments", "today", "doctors"));
     }
-
-
-
-
-
 
     public function deleteAppointment($id)
     {
 
         $appointment = Appointment::findOrFail($id);
         $appointment->delete();
-        return redirect()->route('admin_appointments')->with('success', 'Appointment deleted successfully');
+        return redirect()->route('admin_appointment')->with('success', 'Appointment deleted successfully');
     }
-    public function schedule(){
-        $today=now()->format('Y-m-d');
-         return view ("admin.schedule",compact('today'));
+    public function schedule(Request $request) {
+        $today = now()->format('Y-m-d');
+        $user=User::where('role','a')->first();
+        $searchDocId = $request->input('docid');
+        $searchDate = $request->input('sheduledate');
+
+        $query = schedule::query();
+
+        if ($searchDocId && $searchDocId != "0") {
+            $query->where('docid', $searchDocId);
+        }
+
+        if ($searchDate) {
+            $query->whereDate('scheduledate', $searchDate);
+        }
+
+        $schedule = $query->with(['doctor', 'appointment.patient'])->get();
+        $doctors = doctor::all();
+
+        return view("admin.schedule", compact('today', 'schedule', 'doctors',"user"));
+    }
+
+    public function deleteSchedule($id){
+        $schedule=schedule::where('scheduleid',$id)->first();
+        $appointments=appointment::where('scheduleid',$schedule->scheduleid)->get();
+        foreach($appointments as $app){
+            $app->delete();
+        }
+        $schedule->delete();
+        return redirect()->route("admin_schedule");
+    }
+    public function addSchedule(){
+        $schedule= new schedule();
+        $schedule->title=request('title');
+        $schedule->docid=request('docid');
+        $schedule->nop=request('nop');
+        $schedule->scheduledate=request('scheduledate');
+        $schedule->scheduletime=request('scheduletime');
+        $schedule->save();
+        return redirect()->route("admin_schedule");
     }
 }

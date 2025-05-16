@@ -30,8 +30,8 @@
                                         <img src="{{ asset('img/user.png') }}" alt="" width="100%" style="border-radius:50%">
                                     </td>
                                     <td style="padding:0;margin:0;">
-                                        <p class="profile-title">Administrator</p>
-                                        <p class="profile-subtitle">admin@edoc.com</p>
+                                        <p class="profile-title">{{$user->name}}</p>
+                                    <p class="profile-subtitle">{{$user->email}} </p>
                                     </td>
                                 </tr>
                                 <tr>
@@ -60,7 +60,7 @@
                     </tr>
                     <tr class="menu-row">
                         <td class="menu-btn menu-icon-appoinment  menu-active menu-icon-appoinment-active">
-                            <a href="{{ route('admin_appointments') }}" class="non-style-link-menu non-style-link-menu-active">
+                            <a href="{{ route('admin_appointment') }}" class="non-style-link-menu non-style-link-menu-active">
                                 <div><p class="menu-text">Appointment</p></div></a>
                         </td>
                     </tr>
@@ -75,9 +75,14 @@
             <table border="0" width="100%" style="border-spacing: 0; margin: 0; padding: 0; margin-top: 25px;">
 
                 <tr>
+                    <td width="13%" >
+                        <a href="{{route('admin_appointment')}}" >
+                            <button  class="login-btn btn-primary-soft btn btn-icon-back"  style="padding-top:11px;padding-bottom:11px;margin-left:20px;width:125px">
+                            <font class="tn-in-text">Back</font></button></a>
+                        </td>
                     <td colspan="4" style="padding-top: 10px; width: 100%;">
                         <p class="heading-main12" style="margin-left: 45px; font-size: 18px; color: rgb(49, 49, 49)">
-                            All Appointments ({{ $appointmentsCount }})
+                            All Appointments ({{ $appointments->count() }})
                         </p>
                     </td>
                 </tr>
@@ -91,7 +96,7 @@
                                         Date:
                                     </td>
                                     <td width="30%">
-                                        <form action="{{ route('appointments.filter') }}" method="GET">
+                                        <form action="{{ route('admin_appointment_search') }}" method="post">
                                             @csrf
                                             <input type="date" name="search" id="date" class="input-text filter-container-items" style="margin: 0; width: 95%;">@error('search') <div class="error" style="color:red">{{ $message }}</div>@enderror
                                             <td width="5%" style="text-align: center;">
@@ -127,24 +132,24 @@
                                         <th class="table-headin">Appointment number</th>
                                         <th class="table-headin">Doctor</th>
                                         <th class="table-headin">Session Title</th>
-                                        <th class="table-headin" style="font-size:10px">Session Date & Time</th>
+                                        <th class="table-headin" >Session Date & Time</th>
                                         <th class="table-headin">Appointment Date</th>
                                         <th class="table-headin">Events</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($filteredAppointments as $appointment)
+                                    @forelse($appointments as $appointment)
                                     <tr>
-                                        <td>{{ $appointment->patient->pname }}</td>
-                                        <td style="text-align: center; font-size: 23px; font-weight: 500; color: var(--btnnicetext);">{{ $appointment->appnum }}</td>
-                                        <td>{{ $appointment->schedule->doctor->docname }}</td>
-                                        <td>{{ Str::limit($appointment->schedule->title, 15) }}</td>
-                                        <td style="text-align: center; font-size: 12px;">{{ $appointment->schedule->scheduledate }} <br> {{ $appointment->schedule->scheduletime }}</td>
-                                        <td style="text-align: center;">{{ $appointment->appdate }}</td>
+                                        <td style="margin-top:10px;font-size:15px">{{ $appointment->patient->pname }}</td>
+                                        <td style="text-align: center; font-size: 20px; font-weight: 500; color: var(--btnnicetext);margin-top:10px;">{{ $appointment->appnum }}</td>
+                                        <td style="margin-top:10px">{{ $appointment->schedule->doctor->docname }}</td>
+                                        <td style="margin-top:10px">{{ Str::limit($appointment->schedule->title, 15) }}</td>
+                                        <td style="text-align: center; font-size: 16px;margin-top:10px">{{ $appointment->schedule->scheduledate }} <br> {{ $appointment->schedule->scheduletime }}</td>
+                                        <td style="text-align: center;margin-top:10px">{{ $appointment->appdate }}</td>
                                         <td>
                                             <div style="display: flex; justify-content: center;">
                                                 &nbsp;&nbsp;&nbsp;
-                                                <a href="{{ route('appointments.delete', ['id' => $appointment->appid]) }}" class="non-style-link">
+                                                <a href="?action=remove_appointment&id={{$appointment->appid}}&pname={{$appointment->patient->pname }}&num={{$appointment->appnum }}" class="non-style-link">
                                                     <button class="btn-primary-soft btn button-icon btn-delete">
                                                         <font class="tn-in-text">Cancel</font>
                                                     </button>
@@ -162,7 +167,7 @@
                                                 <p class="heading-main12" style="margin-left: 45px; font-size: 20px; color: rgb(49, 49, 49)">
                                                     We couldn't find anything related to your keywords!
                                                 </p>
-                                                <a class="non-style-link" href="{{ route('admin_appointments') }}">
+                                                <a class="non-style-link" href="{{ route('admin_appointment') }}">
                                                     <button class="login-btn btn-primary-soft btn" style="display: flex; justify-content: center; align-items: center; margin-left: 20px;">
                                                         &nbsp; Show all Appointments &nbsp;
                                                     </button>
@@ -180,5 +185,33 @@
             </table>
         </div>
     </div>
+    @if (request()->has('action') && request()->get('action') == 'remove_appointment')
+        @php
+            $id=$_GET['id'];
+            $patient=$_GET['pname'];
+            $number=$_GET['num'];
+        @endphp
+        <div id="popup1" class="overlay">
+            <div class="popup">
+            <center>
+                <h2>Are you sure?</h2>
+                <a class="close" href="{{route('admin_appointment')}}">&times;</a>
+                <div class="content">
+                    You want to delete this record<br><br>
+                    Patient Name: &nbsp;<b> {{$patient}} </b><br>
+                    Appointment number &nbsp; : <b> {{$number}} </b><br><br>
+
+                </div>
+                <div style="display: flex;justify-content: center;">
+                <a href="{{route('appointments.delete',['id'=>$id])}}" class="non-style-link"><button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;">
+                    <font class="tn-in-text">&nbsp;Yes&nbsp;</font></button></a>&nbsp;&nbsp;&nbsp;
+                <a href="{{route('admin_appointment')}}" class="non-style-link"><button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;"><font class="tn-in-text">
+                    &nbsp;&nbsp;No&nbsp;&nbsp;</font></button></a>
+
+                </div>
+            </center>
+    </div>
+    </div>
+    @endif
 </body>
 </html>
