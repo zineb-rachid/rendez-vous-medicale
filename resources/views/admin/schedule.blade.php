@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/admin.css">
-
+@vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>Schedule</title>
     <style>
         .popup{

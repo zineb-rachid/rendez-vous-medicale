@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/login.css">
-
+   @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>Login</title>
 </head>
 <body>

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('css/signup.css') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>Sign Up</title>
 </head>
 <body>
